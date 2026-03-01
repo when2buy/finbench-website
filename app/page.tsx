@@ -1,3 +1,6 @@
+'use client'
+import { useState } from 'react'
+
 export default function Home() {
   const leaderboard = [
     {
@@ -117,6 +120,8 @@ export default function Home() {
     },
   ]
 
+  const [menuOpen, setMenuOpen] = useState(false)
+
   const diffConfig: Record<string, { color: string; label: string }> = {
     easy: { color: '#22c55e', label: 'easy' },
     medium: { color: '#eab308', label: 'medium' },
@@ -142,7 +147,7 @@ export default function Home() {
               <span className="text-[#00ff88]">Bench</span>
             </a>
 
-            {/* Nav links + GitHub */}
+            {/* Desktop nav links + GitHub */}
             <div className="flex items-center gap-6">
               <div className="hidden sm:flex items-center gap-5 font-mono text-xs text-[#52525b]">
                 <a href="#leaderboard" className="hover:text-[#a1a1aa] transition-colors duration-200">Leaderboard</a>
@@ -161,8 +166,28 @@ export default function Home() {
                 </svg>
                 GitHub ↗
               </a>
+              {/* Hamburger — mobile only */}
+              <button
+                className="sm:hidden flex flex-col justify-center items-center w-8 h-8 gap-1.5"
+                onClick={() => setMenuOpen((o) => !o)}
+                aria-label="Toggle menu"
+              >
+                <span className={`block w-5 h-px bg-[#71717a] transition-transform duration-200 origin-center ${menuOpen ? 'rotate-45 translate-y-[3.5px]' : ''}`} />
+                <span className={`block w-5 h-px bg-[#71717a] transition-opacity duration-200 ${menuOpen ? 'opacity-0' : ''}`} />
+                <span className={`block w-5 h-px bg-[#71717a] transition-transform duration-200 origin-center ${menuOpen ? '-rotate-45 -translate-y-[3.5px]' : ''}`} />
+              </button>
             </div>
           </div>
+
+          {/* Mobile dropdown */}
+          {menuOpen && (
+            <div className="sm:hidden border-t border-[#1e1e24] bg-[#09090b]/95 px-6 py-4 flex flex-col gap-4 font-mono text-xs text-[#52525b]">
+              <a href="#leaderboard" onClick={() => setMenuOpen(false)} className="hover:text-[#a1a1aa] transition-colors duration-200">Leaderboard</a>
+              <a href="#tasks" onClick={() => setMenuOpen(false)} className="hover:text-[#a1a1aa] transition-colors duration-200">Tasks</a>
+              <a href="#run" onClick={() => setMenuOpen(false)} className="hover:text-[#a1a1aa] transition-colors duration-200">Run</a>
+              <a href="#next" onClick={() => setMenuOpen(false)} className="hover:text-[#a1a1aa] transition-colors duration-200">What&apos;s Next</a>
+            </div>
+          )}
         </nav>
 
         {/* ─── Hero ─── */}
