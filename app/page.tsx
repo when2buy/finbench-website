@@ -123,6 +123,64 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const repoUrl = 'https://github.com/Finance-Bench/finance-bench'
+  const tasksDirUrl = `${repoUrl}/tree/main/tasks`
+
+  type RepoTask = { id: string; difficulty?: string }
+  const [repoTasks, setRepoTasks] = useState<RepoTask[]>([])
+  const [repoTasksLoading, setRepoTasksLoading] = useState(true)
+  const [repoTasksError, setRepoTasksError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    setRepoTasksLoading(true)
+    setRepoTasksError(null)
+    fetch('https://api.github.com/repos/Finance-Bench/finance-bench/contents/tasks')
+      .then((r) => {
+        if (!r.ok) throw new Error(`Tasks API: ${r.status}`)
+        return r.json()
+      })
+      .then((contents: { name: string; type: string }[]) => {
+        if (cancelled) return
+        const dirs = (contents || []).filter((item) => item.type === 'dir').map((item) => item.name)
+        if (dirs.length === 0) {
+          setRepoTasks([])
+          setRepoTasksLoading(false)
+          return
+        }
+        const rawBase = 'https://raw.githubusercontent.com/Finance-Bench/finance-bench/main/tasks'
+        Promise.all(
+          dirs.map((name) =>
+            fetch(`${rawBase}/${encodeURIComponent(name)}/task.toml`)
+              .then((r) => (r.ok ? r.text() : ''))
+              .then((text) => {
+                const m = text.match(/difficulty\s*=\s*["']([^"']+)["']/i)
+                return { id: name, difficulty: m ? m[1].toLowerCase() : undefined }
+              })
+              .catch(() => ({ id: name, difficulty: undefined as string | undefined }))
+          )
+        )
+          .then((list) => {
+            if (!cancelled) {
+              setRepoTasks(list.sort((a, b) => a.id.localeCompare(b.id)))
+            }
+          })
+          .catch(() => {
+            if (!cancelled) setRepoTasks(dirs.map((id) => ({ id, difficulty: undefined })).sort((a, b) => a.id.localeCompare(b.id)))
+          })
+          .finally(() => {
+            if (!cancelled) setRepoTasksLoading(false)
+          })
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setRepoTasksError(err instanceof Error ? err.message : 'Failed to load tasks')
+          setRepoTasks([])
+        }
+        setRepoTasksLoading(false)
+      })
+    return () => { cancelled = true }
+  }, [])
+
   const websiteRepoUrl = 'https://github.com/when2buy/finbench-website'
   type Contributor = { login: string; avatarUrl: string; bench: boolean; website: boolean }
   const [contributors, setContributors] = useState<Contributor[]>([])
@@ -265,9 +323,8 @@ export default function Home() {
 
           {/* Stats */}
           <div className="flex flex-wrap items-center gap-2 font-mono text-sm mb-10">
-            <span className="text-[#00ff88]">90</span>
+            <span className="text-[#00ff88]">{repoTasksLoading ? '—' : repoTasks.length}</span>
             <span className="text-[#52525b]">Tasks</span>
-            <span className="text-[#3f3f46] font-mono text-xs">(10 shown)</span>
             <span className="text-[#27272a] mx-2">/</span>
             <span className="text-[#00ff88]">2</span>
             <span className="text-[#52525b]">Models</span>
@@ -570,19 +627,25 @@ export default function Home() {
         <section id="tasks" className="max-w-5xl mx-auto px-6 py-24">
           <h2 className="text-2xl font-semibold mb-1 tracking-tight">Task Catalog</h2>
           <p className="text-sm text-[#52525b] mb-10">
-            Showing {tasks.length} calibration tasks from 90 total. Four difficulty tiers based on expert time estimates.
+            {repoTasksLoading && 'Loading tasks from main…'}
+            {repoTasksError && !repoTasks.length && <span className="text-[#ef4444]">{repoTasksError}</span>}
+            {!repoTasksLoading && !repoTasksError && (
+              <>Tasks merged to main on <a href={tasksDirUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">Finance-Bench</a>. Difficulty from <code className="text-[#71717a]">task.toml</code>.</>
+            )}
           </p>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {tasks.map((task) => {
-              const diff = diffConfig[task.difficulty]
+            {repoTasks.map((task) => {
+              const diff = task.difficulty && diffConfig[task.difficulty] ? diffConfig[task.difficulty] : { color: '#71717a', label: task.difficulty || '—' }
               return (
-                <div
+                <a
                   key={task.id}
-                  className="rounded-xl px-5 py-4 border border-[#1e1e24] bg-[#111113]/60 hover:border-[#3f3f46] transition-colors duration-200 cursor-default"
+                  href={`${repoUrl}/tree/main/tasks/${encodeURIComponent(task.id)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-xl px-5 py-4 border border-[#1e1e24] bg-[#111113]/60 hover:border-[#3f3f46] transition-colors duration-200 cursor-pointer block"
                 >
-                  <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                    <span className="font-mono text-sm font-medium">{task.id}</span>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-mono text-sm font-medium text-[#a1a1aa] hover:text-white">{task.id}</span>
                     <span
                       className="font-mono text-[10px] px-1.5 py-0.5 rounded border"
                       style={{
@@ -591,14 +654,11 @@ export default function Home() {
                         borderColor: `${diff.color}25`,
                       }}
                     >
-                      {task.difficulty}
-                    </span>
-                    <span className="font-mono text-[10px] text-[#3f3f46]">
-                      ~{task.expertTime}
+                      {diff.label}
                     </span>
                   </div>
-                  <p className="text-xs text-[#52525b] leading-relaxed">{task.description}</p>
-                </div>
+                  <p className="text-xs text-[#3f3f46] mt-1.5">View task on GitHub →</p>
+                </a>
               )
             })}
           </div>
