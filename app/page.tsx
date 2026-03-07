@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function Home() {
   const leaderboard = [
@@ -122,6 +122,55 @@ export default function Home() {
 
   const [menuOpen, setMenuOpen] = useState(false)
 
+  const repoUrl = 'https://github.com/Finance-Bench/finance-bench'
+  const websiteRepoUrl = 'https://github.com/oyzh888/finance-bench-website'
+  type Contributor = { login: string; avatarUrl: string; bench: boolean; website: boolean }
+  const [contributors, setContributors] = useState<Contributor[]>([])
+  const [contributorsLoading, setContributorsLoading] = useState(true)
+  const [contributorsError, setContributorsError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    setContributorsLoading(true)
+    setContributorsError(null)
+    const map = new Map<string, Contributor>()
+    const add = (list: { login: string; avatar_url: string; type: string }[], repo: 'bench' | 'website') => {
+      list
+        .filter((c) => c.type !== 'Bot' && !c.login.endsWith('[bot]'))
+        .forEach((c) => {
+          const existing = map.get(c.login)
+          if (existing) {
+            if (repo === 'bench') existing.bench = true
+            else existing.website = true
+          } else {
+            map.set(c.login, {
+              login: c.login,
+              avatarUrl: c.avatar_url,
+              bench: repo === 'bench',
+              website: repo === 'website',
+            })
+          }
+        })
+    }
+    Promise.all([
+      fetch('https://api.github.com/repos/Finance-Bench/finance-bench/contributors?per_page=100').then((r) => (r.ok ? r.json() : [])),
+      fetch('https://api.github.com/repos/oyzh888/finance-bench-website/contributors?per_page=100').then((r) => (r.ok ? r.json() : [])),
+    ])
+      .then(([benchData, websiteData]: { login: string; avatar_url: string; type: string }[][]) => {
+        if (cancelled) return
+        add(benchData, 'bench')
+        add(websiteData, 'website')
+        setContributors(Array.from(map.values()).sort((a, b) => a.login.localeCompare(b.login)))
+      })
+      .catch((err) => {
+        if (!cancelled) setContributorsError(err instanceof Error ? err.message : 'Failed to load contributors')
+      })
+      .finally(() => {
+        if (!cancelled) setContributorsLoading(false)
+      })
+    return () => { cancelled = true }
+  }, [])
+
   const diffConfig: Record<string, { color: string; label: string }> = {
     easy: { color: '#22c55e', label: 'easy' },
     medium: { color: '#eab308', label: 'medium' },
@@ -154,9 +203,11 @@ export default function Home() {
                 <a href="#tasks" className="hover:text-[#a1a1aa] transition-colors duration-200">Tasks</a>
                 <a href="#run" className="hover:text-[#a1a1aa] transition-colors duration-200">Run</a>
                 <a href="#next" className="hover:text-[#a1a1aa] transition-colors duration-200">What&apos;s Next</a>
+                <a href="#contributors" className="hover:text-[#a1a1aa] transition-colors duration-200">Contributors</a>
+                <a href="#docs" className="hover:text-[#a1a1aa] transition-colors duration-200">Docs</a>
               </div>
               <a
-                href="https://github.com/Dongzhikang/finance-bench"
+                href="https://github.com/Finance-Bench/finance-bench"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#fafafa] text-[#09090b] text-xs font-medium rounded-lg hover:bg-[#d4d4d8] transition-colors duration-200"
@@ -186,6 +237,8 @@ export default function Home() {
               <a href="#tasks" onClick={() => setMenuOpen(false)} className="hover:text-[#a1a1aa] transition-colors duration-200">Tasks</a>
               <a href="#run" onClick={() => setMenuOpen(false)} className="hover:text-[#a1a1aa] transition-colors duration-200">Run</a>
               <a href="#next" onClick={() => setMenuOpen(false)} className="hover:text-[#a1a1aa] transition-colors duration-200">What&apos;s Next</a>
+              <a href="#contributors" onClick={() => setMenuOpen(false)} className="hover:text-[#a1a1aa] transition-colors duration-200">Contributors</a>
+              <a href="#docs" onClick={() => setMenuOpen(false)} className="hover:text-[#a1a1aa] transition-colors duration-200">Docs</a>
             </div>
           )}
         </nav>
@@ -225,7 +278,7 @@ export default function Home() {
 
           {/* CTA */}
           <a
-            href="https://github.com/Dongzhikang/finance-bench"
+            href="https://github.com/Finance-Bench/finance-bench"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-[#fafafa] text-[#09090b] text-sm font-medium rounded-lg hover:bg-[#d4d4d8] transition-colors duration-200 cursor-pointer"
@@ -705,6 +758,209 @@ harbor run --path ./tasks \
         {/* Divider */}
         <div className="h-px divider-subtle" aria-hidden="true" />
 
+        {/* ─── Contributors ─── */}
+        <section id="contributors" className="max-w-5xl mx-auto px-6 py-24">
+          <h2 className="text-2xl font-semibold mb-1 tracking-tight">Contributors</h2>
+          <p className="text-sm text-[#52525b] mb-10">
+            Thank you to everyone who has contributed to the benchmark or this website. Sourced from{' '}
+            <a href={repoUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">Finance-Bench</a>
+            {' and '}
+            <a href={websiteRepoUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">finance-bench-website</a>.
+          </p>
+          {contributorsLoading && (
+            <p className="font-mono text-xs text-[#52525b] mb-8">Loading contributors…</p>
+          )}
+          {contributorsError && (
+            <p className="font-mono text-xs text-[#ef4444] mb-8">{contributorsError}</p>
+          )}
+          {!contributorsLoading && !contributorsError && (
+            <p className="font-mono text-xs text-[#52525b] mb-8">
+              {contributors.length} Active Contributors
+            </p>
+          )}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+            {contributors.map((c) => (
+              <div
+                key={c.login}
+                className="rounded-xl px-5 py-5 border border-[#1e1e24] bg-[#111113]/40 hover:border-[#3f3f46] transition-colors duration-200 flex flex-col items-center text-center"
+              >
+                <a
+                  href={`https://github.com/${c.login}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-16 h-16 rounded-full overflow-hidden mb-3 border border-[#27272a] hover:border-[#52525b] transition-colors"
+                >
+                  <img
+                    src={c.avatarUrl}
+                    alt={c.login}
+                    className="w-full h-full object-cover"
+                  />
+                </a>
+                <p className="font-mono text-sm font-medium text-[#a1a1aa] mb-3">{c.login}</p>
+                <div className="flex flex-wrap justify-center gap-3 font-mono text-[11px]">
+                  <a
+                    href={`https://github.com/${c.login}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#00ff88] hover:underline"
+                  >
+                    Profile
+                  </a>
+                  {c.bench && (
+                    <a
+                      href={`${repoUrl}/pulls?q=is%3Apr+author%3A${encodeURIComponent(c.login)}+is%3Amerged`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#00ff88] hover:underline"
+                    >
+                      Bench PRs
+                    </a>
+                  )}
+                  {c.website && (
+                    <a
+                      href={`${websiteRepoUrl}/pulls?q=is%3Apr+author%3A${encodeURIComponent(c.login)}+is%3Amerged`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#00ff88] hover:underline"
+                    >
+                      Website PRs
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-10 text-center">
+            <a
+              href={`${repoUrl}/blob/main/docs/task_contribution.md`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 border border-[#27272a] text-[#a1a1aa] font-mono text-xs rounded-lg hover:border-[#3f3f46] hover:text-white transition-colors duration-200"
+            >
+              Become a Contributor
+            </a>
+          </div>
+        </section>
+
+        {/* Divider */}
+        <div className="h-px divider-subtle" aria-hidden="true" />
+
+        {/* ─── Docs ─── */}
+        <section id="docs" className="max-w-5xl mx-auto px-6 py-24">
+          <h2 className="text-2xl font-semibold mb-1 tracking-tight">Docs</h2>
+          <p className="text-sm text-[#52525b] mb-10">
+            How to contribute tasks to Finance-Bench — crowdsourcing guidelines and task format.
+          </p>
+
+          <div className="space-y-10 text-sm">
+            <div>
+              <h3 className="font-semibold text-[#a1a1aa] mb-2 font-mono text-xs uppercase tracking-wider">Contributing</h3>
+              <p className="text-[#52525b] leading-relaxed mb-3">
+                Finance-Bench is a state-aware, interactive benchmark for financial agent tasks. We welcome task contributions that require real quant work: numerical methods, dirty data, and verifiable outputs. See the full guide on GitHub for step-by-step instructions.
+              </p>
+              <a
+                href={`${repoUrl}/blob/main/docs/task_contribution.md`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#00ff88] hover:underline font-mono text-xs"
+              >
+                Task contribution guide →
+              </a>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-[#a1a1aa] mb-2 font-mono text-xs uppercase tracking-wider">Task requirements</h3>
+              <ul className="list-disc list-inside text-[#52525b] space-y-1.5">
+                <li>Tasks must be <strong className="text-[#a1a1aa]">verifiable and easy to verify</strong>: explicit output contract (what to produce and where to save it), programmatically checkable by code (e.g. <code className="text-[#71717a]">np.isclose</code>).</li>
+                <li><code className="text-[#71717a]">instruction.md</code> and <code className="text-[#71717a]">task.toml</code> must be <strong className="text-[#a1a1aa]">written entirely by humans</strong>. <code className="text-[#71717a]">instruction.md</code> must <strong className="text-[#a1a1aa]">not</strong> reference which skills to use — the agent must figure that out itself.</li>
+                <li>The reference solution must <strong className="text-[#a1a1aa]">not be leaked</strong> via skills or the Dockerfile; no task-specific hints that give away the answer.</li>
+                <li><strong className="text-[#a1a1aa]">Oracle must pass 100%</strong>: the reference solution must pass all tests. Run <code className="text-[#71717a]">harbor run --path ./tasks --task-name &lt;task-id&gt; --agent oracle</code> and confirm every test passes before submitting.</li>
+                <li>Finance-Zero must not pass: run the single-shot baseline; if it passes, the task is too easy.</li>
+                <li>Deterministic: same input → same output; no external APIs at runtime.</li>
+                <li>Use real data, not synthetic — real data has missing values, outliers, mixed formats.</li>
+                <li>Tasks must represent <strong className="text-[#a1a1aa]">realistic professional workflows</strong> without artificial difficulty. The problem itself should be fundamentally hard, not an ordinary problem made adversarial so that agents score low and one can claim hardness.</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-[#a1a1aa] mb-2 font-mono text-xs uppercase tracking-wider">Task format</h3>
+              <p className="text-[#52525b] mb-2">Every task directory must include:</p>
+              <pre className="rounded-xl border border-[#1e1e24] bg-[#0a0a0c] px-4 py-4 overflow-x-auto font-mono text-[11px] text-[#a1a1aa] whitespace-pre">{`tasks/<task-id>/
+├── task.toml                    # Metadata & resource limits
+├── instruction.md               # Agent-facing problem statement
+├── environment/
+│   ├── Dockerfile               # Inherits from finance-bench-sandbox
+│   ├── data/                    # Input datasets
+│   └── skills/                  # OPTIONAL — skills available to agent
+│       └── <skill-name>/
+│           ├── SKILL.md
+│           ├── scripts/         # optional
+│           └── ...
+├── tests/
+│   ├── test.sh                  # Harbor verifier entry-point
+│   └── test_outputs.py          # Pytest assertions
+└── solution/
+    └── solve.sh                 # Reference (oracle) solution`}</pre>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-[#a1a1aa] mb-2 font-mono text-xs uppercase tracking-wider">Workflow</h3>
+              <ol className="list-decimal list-inside text-[#52525b] space-y-1.5">
+                <li>Design the task and implement all required files (instruction, metadata, environment, tests, reference solution).</li>
+                <li>Run <code className="text-[#71717a]">harbor run --path ./tasks --task-name &lt;task-id&gt; --agent oracle</code> — oracle must pass 100%.</li>
+                <li>Run Finance-Zero baseline; it must fail (otherwise the task is too easy).</li>
+                <li>Run at least <strong className="text-[#a1a1aa]">two frontier agents from different companies</strong> (see the &quot;Frontier (Strongest)&quot; section in the <a href={`${repoUrl}/blob/main/docs/model_reference.md`} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">model reference</a>) and record results; include screenshots and a summary table in your PR.</li>
+                <li>Open a PR with your task under <code className="text-[#71717a]">tasks/</code>.</li>
+              </ol>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-[#a1a1aa] mb-2 font-mono text-xs uppercase tracking-wider">FAQ</h3>
+              <div className="space-y-6 text-[#52525b]">
+                <div>
+                  <p className="font-medium text-[#a1a1aa] mb-1">What kind of tasks are we looking for?</p>
+                  <p className="text-sm leading-relaxed">
+                    See the task design principles and difficulty guide in the <a href={`${repoUrl}/blob/main/docs/task_contribution.md`} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">task contribution guide</a>.
+                  </p>
+                </div>
+                <div>
+                  <p className="font-medium text-[#a1a1aa] mb-1">How do I qualify for authorship?</p>
+                  <p className="text-sm leading-relaxed">
+                    Three high-quality tasks merged to main count as automatic authorship.
+                  </p>
+                </div>
+                <div>
+                  <p className="font-medium text-[#a1a1aa] mb-1">What if I contribute fewer tasks but help in other ways?</p>
+                  <p className="text-sm leading-relaxed">
+                    We count other contributions too: engineering (infrastructure, tooling, CI/CD), running experiments, and paper writing. We’re flexible — if you want to help, reach out.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-[#a1a1aa] mb-2 font-mono text-xs uppercase tracking-wider">Resources</h3>
+              <ul className="text-[#52525b] space-y-1">
+                <li>
+                  <a href={repoUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">Finance-Bench repo</a>
+                </li>
+                <li>
+                  <a href={`${repoUrl}/blob/main/docs/task_contribution.md`} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">Task contribution guide (full)</a>
+                </li>
+                <li>
+                  <a href={`${repoUrl}/blob/main/docs/model_reference.md`} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">Model &amp; agent quick reference</a>
+                </li>
+                <li>
+                  <a href="https://github.com/laude-institute/harbor" target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">Harbor framework</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* Divider */}
+        <div className="h-px divider-subtle" aria-hidden="true" />
+
         {/* ─── Footer ─── */}
         <footer className="max-w-5xl mx-auto px-6 py-12">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -720,7 +976,7 @@ harbor run --path ./tasks \
             </p>
             <div className="flex gap-6 font-mono text-xs">
               <a
-                href="https://github.com/Dongzhikang/finance-bench"
+                href="https://github.com/Finance-Bench/finance-bench"
                 className="text-[#3f3f46] hover:text-[#a1a1aa] transition-colors duration-200 cursor-pointer"
               >
                 GitHub
