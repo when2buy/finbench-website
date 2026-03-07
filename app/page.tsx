@@ -123,7 +123,7 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const repoUrl = 'https://github.com/Finance-Bench/finance-bench'
-  const websiteRepoUrl = 'https://github.com/oyzh888/finance-bench-website'
+  const websiteRepoUrl = 'https://github.com/when2buy/finbench-website'
   type Contributor = { login: string; avatarUrl: string; bench: boolean; website: boolean }
   const [contributors, setContributors] = useState<Contributor[]>([])
   const [contributorsLoading, setContributorsLoading] = useState(true)
@@ -154,7 +154,7 @@ export default function Home() {
     }
     Promise.all([
       fetch('https://api.github.com/repos/Finance-Bench/finance-bench/contributors?per_page=100').then((r) => (r.ok ? r.json() : [])),
-      fetch('https://api.github.com/repos/oyzh888/finance-bench-website/contributors?per_page=100').then((r) => (r.ok ? r.json() : [])),
+      fetch('https://api.github.com/repos/when2buy/finbench-website/contributors?per_page=100').then((r) => (r.ok ? r.json() : [])),
     ])
       .then(([benchData, websiteData]: { login: string; avatar_url: string; type: string }[][]) => {
         if (cancelled) return
