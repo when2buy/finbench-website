@@ -1,16 +1,16 @@
 ---
-tags: [finance-bench, roadmap, todo]
+tags: [quantitativefinance-bench, roadmap, todo]
 ---
 
 # Roadmap & 待完成事项
 
 ## 🔴 高优先级（阻塞/紧急）
 
-- [ ] **GitHub Repo**：在 `when2buy` org 创建 `finance-bench-website`，推送代码
+- [ ] **GitHub Repo**：在 `when2buy` org 创建 `quantitativefinance-bench-website`，推送代码
 - [ ] **Fix Task 难度标签**：网站 `hard` 对应 repo 的 `medium-hard`，需对齐
 - [ ] **Finance-Zero baseline**：跑 10 个核心任务，验证难度分布
 - [ ] **cloudflared 自启**：NAS 重启后需自动恢复（当前手动启动）
-- [ ] **SlowPC 容器自启**：确保重启后 `finance-bench-website` 容器自动运行
+- [ ] **SlowPC 容器自启**：确保重启后 `quantitativefinance-bench-website` 容器自动运行
 
 ## 🟡 中优先级（提升内容质量）
 
@@ -22,7 +22,7 @@ tags: [finance-bench, roadmap, todo]
 
 ## 🟢 长期规划
 
-- [ ] **技术报告**：参考 arXiv:2601.11868 写 Finance-Bench 构建文档，投 arXiv
+- [ ] **技术报告**：参考 arXiv:2601.11868 写 QuantitativeFinance-Bench 构建文档，投 arXiv
 - [ ] **Hugging Face Datasets**：托管完整数据集，方便研究者 `datasets.load_dataset()`
 - [ ] **动态排行榜**：后端支持自动提交验证（而非 GitHub PR）
 - [ ] **Vercel 迁移**（可选）：现在自建，如果访问量大可以迁 Vercel 提升稳定性

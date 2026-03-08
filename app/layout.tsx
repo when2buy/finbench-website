@@ -15,11 +15,11 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Finance-Bench | AI Agent Benchmark for Quantitative Finance',
+  title: 'QuantitativeFinance-Bench | AI Agent Benchmark for Quantitative Finance',
   description:
     'The definitive benchmark for evaluating AI agents on real-world quantitative finance tasks. Hard problems. Verifiable outputs.',
   openGraph: {
-    title: 'Finance-Bench',
+    title: 'QuantitativeFinance-Bench',
     description:
       'AI agent benchmark for quantitative finance. 10 tasks, verifiable outputs.',
     type: 'website',

@@ -1,5 +1,5 @@
 ---
-tags: [finance-bench, website, deployment]
+tags: [quantitativefinance-bench, website, deployment]
 ---
 
 # 网站设计 & 部署
@@ -34,7 +34,7 @@ tags: [finance-bench, website, deployment]
 ```
 finbench.when2buy.ai/
 ├── Hero Section
-│   ├── 标题：FinanceBench（Bench 绿色）
+│   ├── 标题：QuantitativeFinanceBench（Bench 绿色）
 │   ├── 副标题定位
 │   ├── 统计：10 Tasks / 2 Models / Pass-Fail Scoring
 │   └── GitHub 按钮
@@ -65,7 +65,7 @@ finbench.when2buy.ai/
 用户 → Cloudflare (finbench.when2buy.ai)
      → nas-tunnel → NAS cloudflared
      → 代理到 SlowPC 100.74.22.32:3000
-     → Docker: finance-bench-website (node:22-bookworm)
+     → Docker: quantitativefinance-bench-website (node:22-bookworm)
      → Next.js 15 (port 3000)
 ```
 
@@ -77,8 +77,8 @@ finbench.when2buy.ai/
 | CF Zone | when2buy.ai (`64c2b073b5551e90b416c0e33336094f`) |
 | NAS CF config | `/etc/cloudflared/config.yml` |
 | SlowPC IP | `100.74.22.32`（Tailscale） |
-| 容器名 | `finance-bench-website` |
-| 代码路径 | SlowPC `/workspace/finance-bench-website` |
+| 容器名 | `quantitativefinance-bench-website` |
+| 代码路径 | SlowPC `/workspace/quantitativefinance-bench-website` |
 
 ### 运维命令
 
@@ -92,7 +92,7 @@ nohup cloudflared tunnel --config /etc/cloudflared/config.yml run nas-tunnel \
   > /var/log/cloudflared.log 2>&1 &
 
 # 检查 SlowPC 容器
-ssh slowpc-linux "docker ps | grep finance-bench-website"
+ssh slowpc-linux "docker ps | grep quantitativefinance-bench-website"
 ```
 
 ---

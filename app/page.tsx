@@ -1,6 +1,27 @@
 'use client'
 import { useState, useEffect } from 'react'
 
+// Task format diagram: ASCII tree, padded so "#" aligns at column 46
+const _pad = (s: string, comment: string) => s + ' '.repeat(46 - s.length) + comment
+const TASK_FORMAT_DIAGRAM = [
+  'tasks/<task-id>/',
+  _pad('+-- task.toml', '# Metadata & resource limits'),
+  _pad('+-- instruction.md', '# Agent-facing problem statement'),
+  '+-- environment/',
+  _pad('|   +-- Dockerfile', '# Inherits from quantitativefinance-bench-sandbox'),
+  _pad('|   +-- data/', '# Input datasets'),
+  _pad('|   \\-- skills/', '# OPTIONAL — skills available to agent'),
+  '|       \\-- <skill-name>/',
+  '|           +-- SKILL.md',
+  _pad('|           +-- scripts/', '# optional'),
+  '|           \\-- ...',
+  '+-- tests/',
+  _pad('|   +-- test.sh', '# Harbor verifier entry-point'),
+  _pad('|   \\-- test_outputs.py', '# Pytest assertions'),
+  '\\-- solution/',
+  _pad('    \\-- solve.sh', '# Reference (oracle) solution'),
+].join('\n')
+
 export default function Home() {
   const leaderboard = [
     {
@@ -122,7 +143,7 @@ export default function Home() {
 
   const [menuOpen, setMenuOpen] = useState(false)
 
-  const repoUrl = 'https://github.com/Finance-Bench/finance-bench'
+  const repoUrl = 'https://github.com/QF-Bench/QuantitativeFinance-Bench'
   const tasksDirUrl = `${repoUrl}/tree/main/tasks`
 
   type RepoTask = { id: string; difficulty?: string }
@@ -134,7 +155,7 @@ export default function Home() {
     let cancelled = false
     setRepoTasksLoading(true)
     setRepoTasksError(null)
-    fetch('https://api.github.com/repos/Finance-Bench/finance-bench/contents/tasks')
+    fetch('https://api.github.com/repos/QF-Bench/QuantitativeFinance-Bench/contents/tasks')
       .then((r) => {
         if (!r.ok) throw new Error(`Tasks API: ${r.status}`)
         return r.json()
@@ -147,7 +168,7 @@ export default function Home() {
           setRepoTasksLoading(false)
           return
         }
-        const rawBase = 'https://raw.githubusercontent.com/Finance-Bench/finance-bench/main/tasks'
+        const rawBase = 'https://raw.githubusercontent.com/QF-Bench/QuantitativeFinance-Bench/main/tasks'
         Promise.all(
           dirs.map((name) =>
             fetch(`${rawBase}/${encodeURIComponent(name)}/task.toml`)
@@ -211,7 +232,7 @@ export default function Home() {
         })
     }
     Promise.all([
-      fetch('https://api.github.com/repos/Finance-Bench/finance-bench/contributors?per_page=100').then((r) => (r.ok ? r.json() : [])),
+      fetch('https://api.github.com/repos/QF-Bench/QuantitativeFinance-Bench/contributors?per_page=100').then((r) => (r.ok ? r.json() : [])),
       fetch('https://api.github.com/repos/when2buy/finbench-website/contributors?per_page=100').then((r) => (r.ok ? r.json() : [])),
     ])
       .then(([benchData, websiteData]: { login: string; avatar_url: string; type: string }[][]) => {
@@ -250,22 +271,22 @@ export default function Home() {
           <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
             {/* Logo */}
             <a href="#" className="font-bold text-sm tracking-tight">
-              <span className="text-white">Finance</span>
+              <span className="text-white">QuantitativeFinance-</span>
               <span className="text-[#00ff88]">Bench</span>
             </a>
 
             {/* Desktop nav links + GitHub */}
             <div className="flex items-center gap-6">
-              <div className="hidden sm:flex items-center gap-5 font-mono text-xs text-[#52525b]">
-                <a href="#leaderboard" className="hover:text-[#a1a1aa] transition-colors duration-200">Leaderboard</a>
-                <a href="#tasks" className="hover:text-[#a1a1aa] transition-colors duration-200">Tasks</a>
-                <a href="#run" className="hover:text-[#a1a1aa] transition-colors duration-200">Run</a>
-                <a href="#next" className="hover:text-[#a1a1aa] transition-colors duration-200">What&apos;s Next</a>
-                <a href="#contributors" className="hover:text-[#a1a1aa] transition-colors duration-200">Contributors</a>
-                <a href="#docs" className="hover:text-[#a1a1aa] transition-colors duration-200">Docs</a>
+              <div className="hidden sm:flex items-center gap-5 font-mono text-sm text-[#a1a1aa]">
+                <a href="#leaderboard" className="hover:text-white transition-colors duration-200">Leaderboard</a>
+                <a href="#tasks" className="hover:text-white transition-colors duration-200">Tasks</a>
+                <a href="#run" className="hover:text-white transition-colors duration-200">Run</a>
+                <a href="#next" className="hover:text-white transition-colors duration-200">What&apos;s Next</a>
+                <a href="#contributors" className="hover:text-white transition-colors duration-200">Contributors</a>
+                <a href="#docs" className="hover:text-white transition-colors duration-200">Docs</a>
               </div>
               <a
-                href="https://github.com/Finance-Bench/finance-bench"
+                href="https://github.com/QF-Bench/QuantitativeFinance-Bench"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#fafafa] text-[#09090b] text-xs font-medium rounded-lg hover:bg-[#d4d4d8] transition-colors duration-200"
@@ -290,13 +311,13 @@ export default function Home() {
 
           {/* Mobile dropdown */}
           {menuOpen && (
-            <div className="sm:hidden border-t border-[#1e1e24] bg-[#09090b]/95 px-6 py-4 flex flex-col gap-4 font-mono text-xs text-[#52525b]">
-              <a href="#leaderboard" onClick={() => setMenuOpen(false)} className="hover:text-[#a1a1aa] transition-colors duration-200">Leaderboard</a>
-              <a href="#tasks" onClick={() => setMenuOpen(false)} className="hover:text-[#a1a1aa] transition-colors duration-200">Tasks</a>
-              <a href="#run" onClick={() => setMenuOpen(false)} className="hover:text-[#a1a1aa] transition-colors duration-200">Run</a>
-              <a href="#next" onClick={() => setMenuOpen(false)} className="hover:text-[#a1a1aa] transition-colors duration-200">What&apos;s Next</a>
-              <a href="#contributors" onClick={() => setMenuOpen(false)} className="hover:text-[#a1a1aa] transition-colors duration-200">Contributors</a>
-              <a href="#docs" onClick={() => setMenuOpen(false)} className="hover:text-[#a1a1aa] transition-colors duration-200">Docs</a>
+            <div className="sm:hidden border-t border-[#1e1e24] bg-[#09090b]/95 px-6 py-4 flex flex-col gap-4 font-mono text-sm text-[#a1a1aa]">
+              <a href="#leaderboard" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors duration-200">Leaderboard</a>
+              <a href="#tasks" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors duration-200">Tasks</a>
+              <a href="#run" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors duration-200">Run</a>
+              <a href="#next" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors duration-200">What&apos;s Next</a>
+              <a href="#contributors" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors duration-200">Contributors</a>
+              <a href="#docs" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors duration-200">Docs</a>
             </div>
           )}
         </nav>
@@ -311,7 +332,7 @@ export default function Home() {
 
           {/* Title */}
           <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight mb-6">
-            Finance
+            QuantitativeFinance-
             <span className="text-[#00ff88] glow-green">Bench</span>
           </h1>
 
@@ -324,18 +345,18 @@ export default function Home() {
           {/* Stats */}
           <div className="flex flex-wrap items-center gap-2 font-mono text-sm mb-10">
             <span className="text-[#00ff88]">{repoTasksLoading ? '—' : repoTasks.length}</span>
-            <span className="text-[#52525b]">Tasks</span>
+            <span className="text-[#71717a]">Tasks</span>
             <span className="text-[#27272a] mx-2">/</span>
-            <span className="text-[#00ff88]">2</span>
-            <span className="text-[#52525b]">Models</span>
+            <span className="text-[#00ff88]">x</span>
+            <span className="text-[#71717a]">Models</span>
             <span className="text-[#27272a] mx-2">/</span>
             <span className="text-[#00ff88]">Pass/Fail</span>
-            <span className="text-[#52525b]">Scoring</span>
+            <span className="text-[#71717a]">Scoring</span>
           </div>
 
           {/* CTA */}
           <a
-            href="https://github.com/Finance-Bench/finance-bench"
+            href="https://github.com/QF-Bench/QuantitativeFinance-Bench"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-[#fafafa] text-[#09090b] text-sm font-medium rounded-lg hover:bg-[#d4d4d8] transition-colors duration-200 cursor-pointer"
@@ -350,10 +371,10 @@ export default function Home() {
         {/* Divider */}
         <div className="h-px divider-accent" aria-hidden="true" />
 
-        {/* ─── What Makes Finance-Bench Different ─── */}
+        {/* ─── What Makes QuantitativeFinance-Bench Different ─── */}
         <section className="max-w-5xl mx-auto px-6 py-24">
-          <h2 className="text-2xl font-semibold mb-1 tracking-tight">What Makes Finance-Bench Different</h2>
-          <p className="text-sm text-[#52525b] mb-10">Not another QA benchmark — agents must think like quants</p>
+          <h2 className="text-2xl font-semibold mb-1 tracking-tight">What Makes QuantitativeFinance-Bench Different</h2>
+          <p className="text-base text-[#a1a1aa] mb-10">Not another QA benchmark — agents must think like quants</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
@@ -361,7 +382,7 @@ export default function Home() {
                 tag: 'General Coding',
                 tagColor: '#71717a',
                 title: 'vs HumanEval / MBPP',
-                body: 'HumanEval tests algorithm logic with unit tests. Finance-Bench requires domain knowledge: Black-Scholes, hazard rates, OU processes. The math must be right, not just the code structure.',
+                body: 'HumanEval tests algorithm logic with unit tests. QuantitativeFinance-Bench requires domain knowledge: Black-Scholes, hazard rates, OU processes. The math must be right, not just the code structure.',
               },
               {
                 tag: 'RAG / QA',
@@ -373,7 +394,7 @@ export default function Home() {
                 tag: 'Terminal Ops',
                 tagColor: '#71717a',
                 title: 'vs Terminal-Bench',
-                body: 'Terminal-Bench evaluates CLI proficiency. Finance-Bench evaluates whether agents can implement numerical methods correctly inside a Docker sandbox with Python financial libraries.',
+                body: 'Terminal-Bench evaluates CLI proficiency. QuantitativeFinance-Bench evaluates whether agents can implement numerical methods correctly inside a Docker sandbox with Python financial libraries.',
               },
               {
                 tag: 'Quality Control',
@@ -397,7 +418,7 @@ export default function Home() {
                   {item.tag}
                 </span>
                 <h3 className="text-sm font-semibold mb-2">{item.title}</h3>
-                <p className="text-xs text-[#52525b] leading-relaxed">{item.body}</p>
+                <p className="text-sm text-[#a1a1aa] leading-relaxed">{item.body}</p>
               </div>
             ))}
           </div>
@@ -408,8 +429,15 @@ export default function Home() {
 
         {/* ─── Leaderboard ─── */}
         <section id="leaderboard" className="max-w-5xl mx-auto px-6 py-24">
-          <h2 className="text-2xl font-semibold mb-1 tracking-tight">Leaderboard</h2>
-          <p className="text-sm text-[#52525b] mb-10">
+          <div className="flex items-center gap-3 mb-10">
+            <h2 className="text-2xl font-semibold tracking-tight">Leaderboard</h2>
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#27272a] text-[#71717a] border border-[#3f3f46]">
+              Coming soon
+            </span>
+          </div>
+
+          <div style={{ display: 'none' }}>
+          <p className="text-base text-[#a1a1aa] mb-10">
             Agent performance ranked by pass rate across {tasks.length} calibration tasks
           </p>
 
@@ -568,6 +596,7 @@ export default function Home() {
           <p className="font-mono text-[11px] text-[#3f3f46] mt-6 pt-5 border-t border-[#1e1e24]">
             Each model was evaluated once. Results are single-run — statistical significance requires ≥5 runs per task. Finance-Zero baseline pending.
           </p>
+          </div>
         </section>
 
         {/* Divider */}
@@ -576,7 +605,7 @@ export default function Home() {
         {/* ─── Key Findings ─── */}
         <section className="max-w-5xl mx-auto px-6 py-24">
           <h2 className="text-2xl font-semibold mb-1 tracking-tight">Key Findings</h2>
-          <p className="text-sm text-[#52525b] mb-10">Insights from the calibration run</p>
+          <p className="text-base text-[#a1a1aa] mb-10">Insights from the calibration run</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
@@ -614,7 +643,7 @@ export default function Home() {
                   {item.tag}
                 </span>
                 <h3 className="text-sm font-semibold mb-2">{item.title}</h3>
-                <p className="text-xs text-[#52525b] leading-relaxed">{item.body}</p>
+                <p className="text-sm text-[#a1a1aa] leading-relaxed">{item.body}</p>
               </div>
             ))}
           </div>
@@ -626,11 +655,11 @@ export default function Home() {
         {/* ─── Task Catalog ─── */}
         <section id="tasks" className="max-w-5xl mx-auto px-6 py-24">
           <h2 className="text-2xl font-semibold mb-1 tracking-tight">Task Catalog</h2>
-          <p className="text-sm text-[#52525b] mb-10">
+          <p className="text-base text-[#a1a1aa] mb-10">
             {repoTasksLoading && 'Loading tasks from main…'}
             {repoTasksError && !repoTasks.length && <span className="text-[#ef4444]">{repoTasksError}</span>}
             {!repoTasksLoading && !repoTasksError && (
-              <>Tasks merged to main on <a href={tasksDirUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">Finance-Bench</a>. Difficulty from <code className="text-[#71717a]">task.toml</code>.</>
+              <>Tasks merged to main on <a href={tasksDirUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">QuantitativeFinance-Bench</a>. Difficulty from <code className="text-[#71717a]">task.toml</code>.</>
             )}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -657,7 +686,7 @@ export default function Home() {
                       {diff.label}
                     </span>
                   </div>
-                  <p className="text-xs text-[#3f3f46] mt-1.5">View task on GitHub →</p>
+                  <p className="text-sm text-[#71717a] mt-1.5">View task on GitHub →</p>
                 </a>
               )
             })}
@@ -670,8 +699,8 @@ export default function Home() {
         {/* ─── Run It Yourself ─── */}
         <section id="run" className="max-w-5xl mx-auto px-6 py-24">
           <h2 className="text-2xl font-semibold mb-1 tracking-tight">Run It Yourself</h2>
-          <p className="text-sm text-[#52525b] mb-10">
-            Evaluate any agent on Finance-Bench using the Harbor framework
+          <p className="text-base text-[#a1a1aa] mb-10">
+            Evaluate any agent on QuantitativeFinance-Bench using the Harbor framework
           </p>
 
           <div className="space-y-6">
@@ -681,7 +710,7 @@ export default function Home() {
                 code: `pip install harbor
 
 # Build sandbox base image (one-time, ~5 minutes)
-docker build -t finance-bench-sandbox:latest \
+docker build -t quantitativefinance-bench-sandbox:latest \
   -f docker/sandbox.Dockerfile .`,
               },
               {
@@ -713,7 +742,7 @@ harbor run --path ./tasks \
                 className="rounded-xl border border-[#1e1e24] overflow-hidden"
               >
                 <div className="px-4 py-2 bg-[#0d0d0f] border-b border-[#1e1e24]">
-                  <span className="font-mono text-[11px] text-[#52525b]">{block.label}</span>
+                  <span className="font-mono text-[11px] text-[#71717a]">{block.label}</span>
                 </div>
                 <pre className="px-5 py-4 bg-[#0a0a0c] overflow-x-auto">
                   <code className="font-mono text-xs text-[#a1a1aa] leading-relaxed whitespace-pre">
@@ -726,7 +755,7 @@ harbor run --path ./tasks \
 
           <p className="font-mono text-[11px] text-[#3f3f46] mt-6">
             Results are saved to{' '}
-            <span className="text-[#52525b]">jobs/&lt;timestamp&gt;/result.json</span>
+            <span className="text-[#71717a]">jobs/&lt;timestamp&gt;/result.json</span>
             . Each run creates agent trajectories, test output, and token usage logs.
           </p>
         </section>
@@ -737,7 +766,7 @@ harbor run --path ./tasks \
         {/* ─── How It Works ─── */}
         <section className="max-w-5xl mx-auto px-6 py-24">
           <h2 className="text-2xl font-semibold mb-1 tracking-tight">How It Works</h2>
-          <p className="text-sm text-[#52525b] mb-10">
+          <p className="text-base text-[#a1a1aa] mb-10">
             Rigorous evaluation powered by Harbor. Binary pass/fail scoring with strict numerical tolerances.
           </p>
 
@@ -772,7 +801,7 @@ harbor run --path ./tasks \
                   {item.step}
                 </span>
                 <h3 className="text-sm font-semibold mt-2 mb-2">{item.title}</h3>
-                <p className="text-xs text-[#52525b] leading-relaxed">{item.body}</p>
+                <p className="text-sm text-[#a1a1aa] leading-relaxed">{item.body}</p>
               </div>
             ))}
           </div>
@@ -784,7 +813,7 @@ harbor run --path ./tasks \
         {/* ─── What's Next ─── */}
         <section id="next" className="max-w-5xl mx-auto px-6 py-24">
           <h2 className="text-2xl font-semibold mb-1 tracking-tight">What&apos;s Next</h2>
-          <p className="text-sm text-[#52525b] mb-10">Expanding the leaderboard with more models and a baseline</p>
+          <p className="text-base text-[#a1a1aa] mb-10">Expanding the leaderboard with more models and a baseline</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
@@ -809,7 +838,7 @@ harbor run --path ./tasks \
                   {item.status}
                 </span>
                 <p className="font-mono font-semibold text-[15px] mb-1 pr-20">{item.model}</p>
-                <p className="font-mono text-xs text-[#52525b]">{item.agent}</p>
+                <p className="font-mono text-sm text-[#a1a1aa]">{item.agent}</p>
               </div>
             ))}
           </div>
@@ -821,20 +850,20 @@ harbor run --path ./tasks \
         {/* ─── Contributors ─── */}
         <section id="contributors" className="max-w-5xl mx-auto px-6 py-24">
           <h2 className="text-2xl font-semibold mb-1 tracking-tight">Contributors</h2>
-          <p className="text-sm text-[#52525b] mb-10">
+          <p className="text-base text-[#a1a1aa] mb-10">
             Thank you to everyone who has contributed to the benchmark or this website. Sourced from{' '}
-            <a href={repoUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">Finance-Bench</a>
+            <a href={repoUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">QuantitativeFinance-Bench</a>
             {' and '}
-            <a href={websiteRepoUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">finance-bench-website</a>.
+            <a href={websiteRepoUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">quantitativefinance-bench-website</a>.
           </p>
           {contributorsLoading && (
-            <p className="font-mono text-xs text-[#52525b] mb-8">Loading contributors…</p>
+            <p className="font-mono text-sm text-[#a1a1aa] mb-8">Loading contributors…</p>
           )}
           {contributorsError && (
             <p className="font-mono text-xs text-[#ef4444] mb-8">{contributorsError}</p>
           )}
           {!contributorsLoading && !contributorsError && (
-            <p className="font-mono text-xs text-[#52525b] mb-8">
+            <p className="font-mono text-sm text-[#a1a1aa] mb-8">
               {contributors.length} Active Contributors
             </p>
           )}
@@ -908,15 +937,15 @@ harbor run --path ./tasks \
         {/* ─── Docs ─── */}
         <section id="docs" className="max-w-5xl mx-auto px-6 py-24">
           <h2 className="text-2xl font-semibold mb-1 tracking-tight">Docs</h2>
-          <p className="text-sm text-[#52525b] mb-10">
-            How to contribute tasks to Finance-Bench — crowdsourcing guidelines and task format.
+          <p className="text-base text-[#a1a1aa] mb-10">
+            How to contribute tasks to QuantitativeFinance-Bench — crowdsourcing guidelines and task format.
           </p>
 
-          <div className="space-y-10 text-sm">
+          <div className="space-y-10 text-base">
             <div>
               <h3 className="font-semibold text-[#a1a1aa] mb-2 font-mono text-xs uppercase tracking-wider">Contributing</h3>
-              <p className="text-[#52525b] leading-relaxed mb-3">
-                Finance-Bench is a state-aware, interactive benchmark for financial agent tasks. We welcome task contributions that require real quant work: numerical methods, dirty data, and verifiable outputs. See the full guide on GitHub for step-by-step instructions.
+              <p className="text-[#a1a1aa] leading-relaxed mb-3">
+                QuantitativeFinance-Bench is a state-aware, interactive benchmark for financial agent tasks. We welcome task contributions that require real quant work: numerical methods, dirty data, and verifiable outputs. See the full guide on GitHub for step-by-step instructions.
               </p>
               <a
                 href={`${repoUrl}/blob/main/docs/task_contribution.md`}
@@ -930,7 +959,7 @@ harbor run --path ./tasks \
 
             <div>
               <h3 className="font-semibold text-[#a1a1aa] mb-2 font-mono text-xs uppercase tracking-wider">Task requirements</h3>
-              <ul className="list-disc list-inside text-[#52525b] space-y-1.5">
+              <ul className="list-disc list-inside text-[#a1a1aa] space-y-1.5">
                 <li>Tasks must be <strong className="text-[#a1a1aa]">verifiable and easy to verify</strong>: explicit output contract (what to produce and where to save it), programmatically checkable by code (e.g. <code className="text-[#71717a]">np.isclose</code>).</li>
                 <li><code className="text-[#71717a]">instruction.md</code> and <code className="text-[#71717a]">task.toml</code> must be <strong className="text-[#a1a1aa]">written entirely by humans</strong>. <code className="text-[#71717a]">instruction.md</code> must <strong className="text-[#a1a1aa]">not</strong> reference which skills to use — the agent must figure that out itself.</li>
                 <li>The reference solution must <strong className="text-[#a1a1aa]">not be leaked</strong> via skills or the Dockerfile; no task-specific hints that give away the answer.</li>
@@ -944,28 +973,13 @@ harbor run --path ./tasks \
 
             <div>
               <h3 className="font-semibold text-[#a1a1aa] mb-2 font-mono text-xs uppercase tracking-wider">Task format</h3>
-              <p className="text-[#52525b] mb-2">Every task directory must include:</p>
-              <pre className="rounded-xl border border-[#1e1e24] bg-[#0a0a0c] px-4 py-4 overflow-x-auto font-mono text-[11px] text-[#a1a1aa] whitespace-pre">{`tasks/<task-id>/
-├── task.toml                    # Metadata & resource limits
-├── instruction.md               # Agent-facing problem statement
-├── environment/
-│   ├── Dockerfile               # Inherits from finance-bench-sandbox
-│   ├── data/                    # Input datasets
-│   └── skills/                  # OPTIONAL — skills available to agent
-│       └── <skill-name>/
-│           ├── SKILL.md
-│           ├── scripts/         # optional
-│           └── ...
-├── tests/
-│   ├── test.sh                  # Harbor verifier entry-point
-│   └── test_outputs.py          # Pytest assertions
-└── solution/
-    └── solve.sh                 # Reference (oracle) solution`}</pre>
+              <p className="text-[#a1a1aa] mb-2">Every task directory must include:</p>
+              <pre className="rounded-xl border border-[#1e1e24] bg-[#0a0a0c] px-4 py-4 overflow-x-auto font-mono text-[11px] text-[#a1a1aa] whitespace-pre">{TASK_FORMAT_DIAGRAM}</pre>
             </div>
 
             <div>
               <h3 className="font-semibold text-[#a1a1aa] mb-2 font-mono text-xs uppercase tracking-wider">Workflow</h3>
-              <ol className="list-decimal list-inside text-[#52525b] space-y-1.5">
+              <ol className="list-decimal list-inside text-[#a1a1aa] space-y-1.5">
                 <li>Design the task and implement all required files (instruction, metadata, environment, tests, reference solution).</li>
                 <li>Run <code className="text-[#71717a]">harbor run --path ./tasks --task-name &lt;task-id&gt; --agent oracle</code> — oracle must pass 100%.</li>
                 <li>Run Finance-Zero baseline; it must fail (otherwise the task is too easy).</li>
@@ -976,22 +990,22 @@ harbor run --path ./tasks \
 
             <div>
               <h3 className="font-semibold text-[#a1a1aa] mb-2 font-mono text-xs uppercase tracking-wider">FAQ</h3>
-              <div className="space-y-6 text-[#52525b]">
+              <div className="space-y-6 text-[#a1a1aa]">
                 <div>
                   <p className="font-medium text-[#a1a1aa] mb-1">What kind of tasks are we looking for?</p>
-                  <p className="text-sm leading-relaxed">
+                  <p className="text-base text-[#a1a1aa] leading-relaxed">
                     See the task design principles and difficulty guide in the <a href={`${repoUrl}/blob/main/docs/task_contribution.md`} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">task contribution guide</a>.
                   </p>
                 </div>
                 <div>
                   <p className="font-medium text-[#a1a1aa] mb-1">How do I qualify for authorship?</p>
-                  <p className="text-sm leading-relaxed">
-                    Three high-quality tasks merged to main count as automatic authorship.
+                  <p className="text-base text-[#a1a1aa] leading-relaxed">
+                    Three high-quality tasks merged to main count as automatic authorship. Your set must include at most one easy task and at least one hard task. Edge cases (e.g. two hard tasks) need to be reviewed on a case-by-case basis.
                   </p>
                 </div>
                 <div>
                   <p className="font-medium text-[#a1a1aa] mb-1">What if I contribute fewer tasks but help in other ways?</p>
-                  <p className="text-sm leading-relaxed">
+                  <p className="text-base text-[#a1a1aa] leading-relaxed">
                     We count other contributions too: engineering (infrastructure, tooling, CI/CD), running experiments, and paper writing. We’re flexible — if you want to help, reach out.
                   </p>
                 </div>
@@ -1000,9 +1014,9 @@ harbor run --path ./tasks \
 
             <div>
               <h3 className="font-semibold text-[#a1a1aa] mb-2 font-mono text-xs uppercase tracking-wider">Resources</h3>
-              <ul className="text-[#52525b] space-y-1">
+              <ul className="text-[#a1a1aa] space-y-1">
                 <li>
-                  <a href={repoUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">Finance-Bench repo</a>
+                  <a href={repoUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">QuantitativeFinance-Bench repo</a>
                 </li>
                 <li>
                   <a href={`${repoUrl}/blob/main/docs/task_contribution.md`} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">Task contribution guide (full)</a>
@@ -1028,7 +1042,7 @@ harbor run --path ./tasks \
               Showing 10 of 90 tasks. Built on{' '}
               <a
                 href="https://github.com/laude-institute/harbor"
-                className="text-[#52525b] hover:text-[#a1a1aa] transition-colors duration-200 cursor-pointer"
+                className="text-[#71717a] hover:text-[#a1a1aa] transition-colors duration-200 cursor-pointer"
               >
                 Harbor
               </a>{' '}
@@ -1036,7 +1050,7 @@ harbor run --path ./tasks \
             </p>
             <div className="flex gap-6 font-mono text-xs">
               <a
-                href="https://github.com/Finance-Bench/finance-bench"
+                href="https://github.com/QF-Bench/QuantitativeFinance-Bench"
                 className="text-[#3f3f46] hover:text-[#a1a1aa] transition-colors duration-200 cursor-pointer"
               >
                 GitHub

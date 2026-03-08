@@ -1,9 +1,9 @@
 ---
-tags: [project, finance-bench, index]
+tags: [project, quantitativefinance-bench, index]
 created: 2026-02-28
 ---
 
-# Finance-Bench 项目索引
+# QuantitativeFinance-Bench 项目索引
 
 > AI Agent 量化金融评测平台 | https://finbench.when2buy.ai
 
@@ -20,6 +20,6 @@ created: 2026-02-28
 ## 快速状态
 
 - **网站**：✅ https://finbench.when2buy.ai（live）
-- **Benchmark repo**：https://github.com/Dongzhikang/finance-bench/tree/task/medium-hard-5
+- **Benchmark repo**：https://github.com/QF-Bench/QuantitativeFinance-Bench
 - **当前榜首**：claude-haiku-3-5 via claude-code — **60%**（6/10 tasks）
 - **总任务数**：90 tasks，当前展示 10 个核心任务

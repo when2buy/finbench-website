@@ -1,5 +1,5 @@
 ---
-tags: [finance-bench, results, analysis]
+tags: [quantitativefinance-bench, results, analysis]
 updated: 2026-02-28
 ---
 

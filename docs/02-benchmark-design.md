@@ -1,12 +1,12 @@
 ---
-tags: [finance-bench, benchmark, technical]
+tags: [quantitativefinance-bench, benchmark, technical]
 ---
 
 # Benchmark 设计文档
 
 ## 运行框架：Harbor
 
-Finance-Bench 是运行在 [Harbor](https://github.com/laude-institute/harbor) 框架上的数据集，不是独立 runner。
+QuantitativeFinance-Bench 是运行在 [Harbor](https://github.com/laude-institute/harbor) 框架上的数据集，不是独立 runner。
 
 ```
 harbor run --path ./tasks --agent claude-code --model anthropic/claude-sonnet-4-...
@@ -16,7 +16,7 @@ harbor run --path ./tasks --agent claude-code --model anthropic/claude-sonnet-4-
 
 ```
 1. Harbor 读取 tasks/ 目录
-2. 为每个任务构建 Docker 镜像（继承 finance-bench-sandbox:latest）
+2. 为每个任务构建 Docker 镜像（继承 quantitativefinance-bench-sandbox:latest）
 3. Agent 进入 sandbox：
    - 只能看到 instruction.md 和 /app 目录下的输入数据
    - 可以写代码、执行代码、看输出、迭代调试
