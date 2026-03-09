@@ -265,14 +265,13 @@ export default function Home() {
       {/* Background dot grid */}
       <div className="fixed inset-0 bg-dot-grid pointer-events-none" aria-hidden="true" />
 
-      <main className="relative">
+      <main className="relative overflow-x-hidden">
         {/* ─── Navbar ─── */}
         <nav className="sticky top-0 z-50 w-full bg-[#09090b]/90 backdrop-blur border-b border-[#1e1e24]">
           <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
             {/* Logo */}
             <a href="#" className="font-bold text-sm tracking-tight">
-              <span className="text-white">QuantitativeFinance-</span>
-              <span className="text-[#00ff88]">Bench</span>
+              <span className="text-white">QF</span><span className="text-[#00ff88]">Bench</span>
             </a>
 
             {/* Desktop nav links + GitHub */}
@@ -331,10 +330,12 @@ export default function Home() {
           </div>
 
           {/* Title */}
-          <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight mb-6">
-            QuantitativeFinance-
+          <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tight mb-4 break-words">
+            <span className="block sm:inline">Quantitative</span>
+            <span className="block sm:inline">Finance-</span>
             <span className="text-[#00ff88] glow-green">Bench</span>
           </h1>
+          <p className="text-xs font-mono text-[#3f3f46] tracking-widest uppercase mb-6">QFBench · Quantitative Finance Benchmark</p>
 
           {/* Subtitle */}
           <p className="text-lg sm:text-xl text-[#a1a1aa] max-w-xl mb-10 leading-relaxed">
@@ -371,9 +372,9 @@ export default function Home() {
         {/* Divider */}
         <div className="h-px divider-accent" aria-hidden="true" />
 
-        {/* ─── What Makes QuantitativeFinance-Bench Different ─── */}
+        {/* ─── What Makes QFBench Different ─── */}
         <section className="max-w-5xl mx-auto px-6 py-24">
-          <h2 className="text-2xl font-semibold mb-1 tracking-tight">What Makes QuantitativeFinance-Bench Different</h2>
+          <h2 className="text-2xl font-semibold mb-1 tracking-tight">What Makes QFBench Different</h2>
           <p className="text-base text-[#a1a1aa] mb-10">Not another QA benchmark — agents must think like quants</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -382,7 +383,7 @@ export default function Home() {
                 tag: 'General Coding',
                 tagColor: '#71717a',
                 title: 'vs HumanEval / MBPP',
-                body: 'HumanEval tests algorithm logic with unit tests. QuantitativeFinance-Bench requires domain knowledge: Black-Scholes, hazard rates, OU processes. The math must be right, not just the code structure.',
+                body: 'HumanEval tests algorithm logic with unit tests. QFBench requires domain knowledge: Black-Scholes, hazard rates, OU processes. The math must be right, not just the code structure.',
               },
               {
                 tag: 'RAG / QA',
@@ -394,7 +395,7 @@ export default function Home() {
                 tag: 'Terminal Ops',
                 tagColor: '#71717a',
                 title: 'vs Terminal-Bench',
-                body: 'Terminal-Bench evaluates CLI proficiency. QuantitativeFinance-Bench evaluates whether agents can implement numerical methods correctly inside a Docker sandbox with Python financial libraries.',
+                body: 'Terminal-Bench evaluates CLI proficiency. QFBench evaluates whether agents can implement numerical methods correctly inside a Docker sandbox with Python financial libraries.',
               },
               {
                 tag: 'Quality Control',
@@ -659,7 +660,7 @@ export default function Home() {
             {repoTasksLoading && 'Loading tasks from main…'}
             {repoTasksError && !repoTasks.length && <span className="text-[#ef4444]">{repoTasksError}</span>}
             {!repoTasksLoading && !repoTasksError && (
-              <>Tasks merged to main on <a href={tasksDirUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">QuantitativeFinance-Bench</a>. Difficulty from <code className="text-[#71717a]">task.toml</code>.</>
+              <>Tasks merged to main on <a href={tasksDirUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">QFBench</a>. Difficulty from <code className="text-[#71717a]">task.toml</code>.</>
             )}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -700,7 +701,7 @@ export default function Home() {
         <section id="run" className="max-w-5xl mx-auto px-6 py-24">
           <h2 className="text-2xl font-semibold mb-1 tracking-tight">Run It Yourself</h2>
           <p className="text-base text-[#a1a1aa] mb-10">
-            Evaluate any agent on QuantitativeFinance-Bench using the Harbor framework
+            Evaluate any agent on QFBench using the Harbor framework
           </p>
 
           <div className="space-y-6">
@@ -852,7 +853,7 @@ harbor run --path ./tasks \
           <h2 className="text-2xl font-semibold mb-1 tracking-tight">Contributors</h2>
           <p className="text-base text-[#a1a1aa] mb-10">
             Thank you to everyone who has contributed to the benchmark or this website. Sourced from{' '}
-            <a href={repoUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">QuantitativeFinance-Bench</a>
+            <a href={repoUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">QFBench</a>
             {' and '}
             <a href={websiteRepoUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">quantitativefinance-bench-website</a>.
           </p>
@@ -938,14 +939,14 @@ harbor run --path ./tasks \
         <section id="docs" className="max-w-5xl mx-auto px-6 py-24">
           <h2 className="text-2xl font-semibold mb-1 tracking-tight">Docs</h2>
           <p className="text-base text-[#a1a1aa] mb-10">
-            How to contribute tasks to QuantitativeFinance-Bench — crowdsourcing guidelines and task format.
+            How to contribute tasks to QFBench — crowdsourcing guidelines and task format.
           </p>
 
           <div className="space-y-10 text-base">
             <div>
               <h3 className="font-semibold text-[#a1a1aa] mb-2 font-mono text-xs uppercase tracking-wider">Contributing</h3>
               <p className="text-[#a1a1aa] leading-relaxed mb-3">
-                QuantitativeFinance-Bench is a state-aware, interactive benchmark for financial agent tasks. We welcome task contributions that require real quant work: numerical methods, dirty data, and verifiable outputs. See the full guide on GitHub for step-by-step instructions.
+                QFBench is a state-aware, interactive benchmark for financial agent tasks. We welcome task contributions that require real quant work: numerical methods, dirty data, and verifiable outputs. See the full guide on GitHub for step-by-step instructions.
               </p>
               <a
                 href={`${repoUrl}/blob/main/docs/task_contribution.md`}
@@ -1016,7 +1017,7 @@ harbor run --path ./tasks \
               <h3 className="font-semibold text-[#a1a1aa] mb-2 font-mono text-xs uppercase tracking-wider">Resources</h3>
               <ul className="text-[#a1a1aa] space-y-1">
                 <li>
-                  <a href={repoUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">QuantitativeFinance-Bench repo</a>
+                  <a href={repoUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">QFBench repo</a>
                 </li>
                 <li>
                   <a href={`${repoUrl}/blob/main/docs/task_contribution.md`} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">Task contribution guide (full)</a>
