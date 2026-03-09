@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  generateBuildId: async () => {
-    return `build-${Date.now()}`
-  },
+  // Load static assets from finbench.when2buy.ai to bypass qfbench.com CF cache issues
+  assetPrefix: process.env.ASSET_PREFIX || '',
   async headers() {
     return [
       {
