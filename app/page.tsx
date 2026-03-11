@@ -26,119 +26,121 @@ export default function Home() {
   const leaderboard = [
     {
       rank: 1,
-      model: 'claude-haiku-3-5',
-      agent: 'claude-code',
-      tasks: 10,
-      pass: 6,
-      passRate: 60,
-      date: '2026-02-20',
+      model: "claude-opus-4-6",
+      agent: "claude-code",
+      tasks: 14,
+      pass: 7,
+      passRate: 50,
+      date: "2026-03-07",
       taskResults: {
-        'cds-pricing': true,
-        'implied-volatility': false,
-        'bond-convexity': false,
-        'mean-reversion': true,
-        'momentum-factor': true,
-        'risk-parity': false,
-        'credit-risk': true,
-        'tail-risk': true,
-        'financial-statements': false,
-        'data-reconciliation': true,
+        "american-option-fd-new": true,
+        "barrier-garch-var": false,
+        "bollinger-backtest-aapl": true,
+        "cta-basel-capital": false,
+        "fama-french-factor-model-new": true,
+        "hull-white-swaption": false,
+        "kelly-var-sizing": true,
+        "mc-greeks-surface": true,
+        "momentum-backtest": true,
+        "regime-cta-vol-target": false,
+        "regime-riskparity-cvar": false,
+        "sentiment-factor-alpha": false,
+        "stochvol-implied-surface-new": true,
+        "structured-note-risk": false,
       },
     },
     {
       rank: 2,
-      model: 'claude-sonnet-3-5',
-      agent: 'claude-code',
-      tasks: 10,
-      pass: 3,
-      passRate: 30,
-      date: '2026-02-21',
+      model: "claude-sonnet-4-6",
+      agent: "claude-code",
+      tasks: 14,
+      pass: 5,
+      passRate: 36,
+      date: "2026-03-07",
       taskResults: {
-        'cds-pricing': false,
-        'implied-volatility': false,
-        'bond-convexity': true,
-        'mean-reversion': false,
-        'momentum-factor': true,
-        'risk-parity': false,
-        'credit-risk': true,
-        'tail-risk': false,
-        'financial-statements': false,
-        'data-reconciliation': false,
+        "american-option-fd-new": true,
+        "barrier-garch-var": false,
+        "bollinger-backtest-aapl": true,
+        "cta-basel-capital": false,
+        "fama-french-factor-model-new": true,
+        "hull-white-swaption": false,
+        "kelly-var-sizing": false,
+        "mc-greeks-surface": false,
+        "momentum-backtest": true,
+        "regime-cta-vol-target": false,
+        "regime-riskparity-cvar": false,
+        "sentiment-factor-alpha": false,
+        "stochvol-implied-surface-new": true,
+        "structured-note-risk": false,
+      },
+    },
+    {
+      rank: 3,
+      model: "claude-haiku-4-5",
+      agent: "claude-code",
+      tasks: 7,
+      pass: 2,
+      passRate: 29,
+      date: "2026-03-08",
+      taskResults: {
+        "american-option-fd-new": false,
+        "barrier-garch-var": null,
+        "bollinger-backtest-aapl": false,
+        "cta-basel-capital": null,
+        "fama-french-factor-model-new": true,
+        "hull-white-swaption": false,
+        "kelly-var-sizing": null,
+        "mc-greeks-surface": false,
+        "momentum-backtest": true,
+        "regime-cta-vol-target": null,
+        "regime-riskparity-cvar": null,
+        "sentiment-factor-alpha": null,
+        "stochvol-implied-surface-new": false,
+        "structured-note-risk": null,
+      },
+    },
+    {
+      rank: 4,
+      model: "gemini-2.5-pro",
+      agent: "gemini-cli",
+      tasks: 7,
+      pass: 0,
+      passRate: 0,
+      date: "2026-03-06",
+      taskResults: {
+        "american-option-fd-new": null,
+        "barrier-garch-var": false,
+        "bollinger-backtest-aapl": null,
+        "cta-basel-capital": false,
+        "fama-french-factor-model-new": null,
+        "hull-white-swaption": null,
+        "kelly-var-sizing": false,
+        "mc-greeks-surface": null,
+        "momentum-backtest": null,
+        "regime-cta-vol-target": false,
+        "regime-riskparity-cvar": false,
+        "sentiment-factor-alpha": false,
+        "stochvol-implied-surface-new": null,
+        "structured-note-risk": false,
       },
     },
   ]
 
   const tasks = [
-    {
-      id: 'cds-pricing',
-      abbr: 'CDS',
-      difficulty: 'medium-hard' as const,
-      expertTime: '25 min',
-      description: 'Calculate par CDS spreads for given tenors using hazard rates, survival probabilities, and recovery rates. Quarterly premium payments.',
-    },
-    {
-      id: 'implied-volatility',
-      abbr: 'IV',
-      difficulty: 'hard' as const,
-      expertTime: '35 min',
-      description: 'Extract implied volatility surface from option prices using Newton-Raphson iteration on the Black-Scholes formula.',
-    },
-    {
-      id: 'bond-convexity',
-      abbr: 'CONV',
-      difficulty: 'medium' as const,
-      expertTime: '20 min',
-      description: 'Compute bond DV01, duration, and convexity for fixed income hedging.',
-    },
-    {
-      id: 'mean-reversion',
-      abbr: 'MR',
-      difficulty: 'medium' as const,
-      expertTime: '22 min',
-      description: 'Estimate Ornstein-Uhlenbeck parameters (θ, μ, σ) via OLS regression. Compute half-life and trading entry thresholds.',
-    },
-    {
-      id: 'momentum-factor',
-      abbr: 'MOM',
-      difficulty: 'medium-hard' as const,
-      expertTime: '30 min',
-      description: 'Construct cross-sectional momentum factors from historical return data.',
-    },
-    {
-      id: 'risk-parity',
-      abbr: 'RP',
-      difficulty: 'medium' as const,
-      expertTime: '25 min',
-      description: 'Optimize portfolio weights using risk parity methodology from the covariance matrix.',
-    },
-    {
-      id: 'credit-risk',
-      abbr: 'CR',
-      difficulty: 'hard' as const,
-      expertTime: '35 min',
-      description: 'Model credit risk transitions and multi-period default probabilities.',
-    },
-    {
-      id: 'tail-risk',
-      abbr: 'TAIL',
-      difficulty: 'hard' as const,
-      expertTime: '40 min',
-      description: 'Estimate tail risk measures (VaR/ES) using extreme value theory (EVT).',
-    },
-    {
-      id: 'financial-statements',
-      abbr: 'FS',
-      difficulty: 'medium' as const,
-      expertTime: '25 min',
-      description: 'Parse and analyze structured financial statement data across multiple formats.',
-    },
-    {
-      id: 'data-reconciliation',
-      abbr: 'DR',
-      difficulty: 'medium' as const,
-      expertTime: '25 min',
-      description: 'Identify and resolve discrepancies across multi-source financial datasets.',
-    },
+    { id: "american-option-fd-new", abbr: "AOF", difficulty: "hard" as const, expertTime: "45 min", description: "Price American options via finite-difference PDE methods with early exercise boundary detection." },
+    { id: "barrier-garch-var", abbr: "BGV", difficulty: "hard" as const, expertTime: "50 min", description: "Model barrier option pricing combined with GARCH volatility estimation and VaR computation." },
+    { id: "bollinger-backtest-aapl", abbr: "BBA", difficulty: "medium" as const, expertTime: "30 min", description: "Implement and backtest a Bollinger Band strategy on AAPL historical data with transaction costs." },
+    { id: "cta-basel-capital", abbr: "CBC", difficulty: "hard" as const, expertTime: "60 min", description: "Compute CTA strategy risk metrics and Basel III regulatory capital requirements." },
+    { id: "fama-french-factor-model-new", abbr: "FFM", difficulty: "easy" as const, expertTime: "20 min", description: "Estimate Fama-French three-factor model exposures via OLS regression on equity returns." },
+    { id: "hull-white-swaption", abbr: "HWS", difficulty: "very_hard" as const, expertTime: "75 min", description: "Price swaptions using the Hull-White one-factor interest rate model with analytical formulas." },
+    { id: "kelly-var-sizing", abbr: "KVS", difficulty: "medium" as const, expertTime: "35 min", description: "Derive Kelly-optimal position sizes incorporating VaR constraints and portfolio correlation." },
+    { id: "mc-greeks-surface", abbr: "MGS", difficulty: "hard" as const, expertTime: "75 min", description: "Compute option Greeks surface via Monte Carlo using finite-difference, pathwise, and likelihood-ratio methods." },
+    { id: "momentum-backtest", abbr: "MOM", difficulty: "easy" as const, expertTime: "20 min", description: "Cross-sectional momentum factor backtest with monthly rebalancing and transaction cost modeling." },
+    { id: "regime-cta-vol-target", abbr: "RCV", difficulty: "medium" as const, expertTime: "40 min", description: "Detect market regimes and apply volatility targeting to a CTA strategy with dynamic position sizing." },
+    { id: "regime-riskparity-cvar", abbr: "RRC", difficulty: "hard" as const, expertTime: "60 min", description: "Regime-conditional risk-parity portfolio construction with CVaR optimization and eigenvalue analysis." },
+    { id: "sentiment-factor-alpha", abbr: "SFA", difficulty: "hard" as const, expertTime: "55 min", description: "Build a sentiment-based alpha factor from text data and evaluate its predictive power for returns." },
+    { id: "stochvol-implied-surface-new", abbr: "SIS", difficulty: "hard" as const, expertTime: "50 min", description: "Calibrate a stochastic volatility model and generate the full implied volatility surface." },
+    { id: "structured-note-risk", abbr: "SNR", difficulty: "hard" as const, expertTime: "55 min", description: "Price and risk-manage a structured note combining equity-linked payoffs with credit risk." },
   ]
 
   const [menuOpen, setMenuOpen] = useState(false)
@@ -255,6 +257,7 @@ export default function Home() {
     medium: { color: '#eab308', label: 'medium' },
     'medium-hard': { color: '#f97316', label: 'medium-hard' },
     hard: { color: '#ef4444', label: 'hard' },
+    very_hard: { color: "#a855f7", label: "very hard" },
   }
 
   return (
@@ -432,12 +435,8 @@ export default function Home() {
         <section id="leaderboard" className="max-w-5xl mx-auto px-6 py-24">
           <div className="flex items-center gap-3 mb-10">
             <h2 className="text-2xl font-semibold tracking-tight">Leaderboard</h2>
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#27272a] text-[#71717a] border border-[#3f3f46]">
-              Coming soon
-            </span>
           </div>
 
-          <div style={{ display: 'none' }}>
           <p className="text-base text-[#a1a1aa] mb-10">
             Agent performance ranked by pass rate across {tasks.length} calibration tasks
           </p>
@@ -472,6 +471,9 @@ export default function Home() {
                     </span>
                     <span className="font-mono text-sm text-[#52525b]">
                       {entry.pass}&thinsp;/&thinsp;{entry.tasks}
+                      {entry.tasks < 14 && (
+                        <span className="font-mono text-[10px] text-[#3f3f46] ml-1">tested</span>
+                      )}
                     </span>
                   </div>
 
@@ -502,7 +504,7 @@ export default function Home() {
               {/* Column headers */}
               <div
                 className="grid gap-1.5 mb-2"
-                style={{ gridTemplateColumns: '148px repeat(10, 1fr) 64px' }}
+                style={{ gridTemplateColumns: '148px repeat(14, 1fr) 64px' }}
               >
                 <div />
                 {tasks.map((task) => (
@@ -529,7 +531,7 @@ export default function Home() {
                 <div
                   key={entry.rank}
                   className="grid gap-1.5 mb-1.5"
-                  style={{ gridTemplateColumns: '148px repeat(10, 1fr) 64px' }}
+                  style={{ gridTemplateColumns: '148px repeat(14, 1fr) 64px' }}
                 >
                   {/* Model name */}
                   <div className="flex items-center pr-2">
@@ -540,17 +542,21 @@ export default function Home() {
 
                   {/* Task cells */}
                   {tasks.map((task) => {
-                    const passed =
+                    const result =
                       entry.taskResults[task.id as keyof typeof entry.taskResults]
+                    const cellClass =
+                      result === true
+                        ? 'bg-[#00ff88]/20 border border-[#00ff88]/10 hover:bg-[#00ff88]/30 hover:border-[#00ff88]/25'
+                        : result === false
+                        ? 'bg-[#18181b] border border-[#27272a]/40 hover:bg-[#1f1f23] hover:border-[#27272a]'
+                        : 'bg-[#111113] border border-[#27272a]/20 opacity-40'
+                    const cellTitle =
+                      result === true ? 'Pass' : result === false ? 'Fail' : 'Not tested'
                     return (
                       <div
                         key={task.id}
-                        className={`h-9 rounded-[3px] transition-all duration-200 cursor-default ${
-                          passed
-                            ? 'bg-[#00ff88]/20 border border-[#00ff88]/10 hover:bg-[#00ff88]/30 hover:border-[#00ff88]/25'
-                            : 'bg-[#18181b] border border-[#27272a]/40 hover:bg-[#1f1f23] hover:border-[#27272a]'
-                        }`}
-                        title={`${task.id}: ${passed ? 'Pass' : 'Fail'}`}
+                        className={`h-9 rounded-[3px] transition-all duration-200 cursor-default ${cellClass}`}
+                        title={`${task.id}: ${cellTitle}`}
                       />
                     )
                   })}
@@ -577,8 +583,12 @@ export default function Home() {
                   <div className="w-3 h-3 rounded-sm bg-[#18181b] border border-[#27272a]/40" />
                   <span className="font-mono text-[10px] text-[#52525b]">Fail</span>
                 </div>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-3 h-3 rounded-sm bg-[#111113] border border-[#27272a]/20 opacity-40" />
+                  <span className="font-mono text-[10px] text-[#52525b]">Not tested</span>
+                </div>
                 <div className="flex-1" />
-                {(['hard', 'medium-hard', 'medium', 'easy'] as const).map((d) => (
+                {(['very_hard', 'hard', 'medium-hard', 'medium', 'easy'] as const).map((d) => (
                   <div key={d} className="flex items-center gap-1.5">
                     <span
                       className="w-1.5 h-1.5 rounded-full"
@@ -597,7 +607,6 @@ export default function Home() {
           <p className="font-mono text-[11px] text-[#3f3f46] mt-6 pt-5 border-t border-[#1e1e24]">
             Each model was evaluated once. Results are single-run — statistical significance requires ≥5 runs per task. Finance-Zero baseline pending.
           </p>
-          </div>
         </section>
 
         {/* Divider */}
@@ -611,22 +620,22 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
               {
-                tag: 'Unexpected',
-                tagColor: '#f97316',
-                title: 'Haiku Outperforms Sonnet',
-                body: 'claude-haiku-3-5 scored 60% vs claude-sonnet-3-5 at 30% — a counterintuitive result. Hypothesis: larger models over-engineer solutions, while quantitative tasks reward direct, precise numerical implementation.',
+                tag: "Winner",
+                tagColor: "#00ff88",
+                title: "Opus Leads at 50%",
+                body: "claude-opus-4-6 passes 7 of 14 tasks (50%), outperforming claude-sonnet-4-6 at 36% (5/14). Opus shows consistent strength on complex multi-method tasks like kelly-var-sizing and mc-greeks-surface where Sonnet fails.",
               },
               {
-                tag: 'Common Failure',
-                tagColor: '#ef4444',
-                title: 'Numerical Methods Are the Bottleneck',
-                body: 'implied-volatility (Newton-Raphson convergence) and risk-parity (covariance optimization) failed for both models. financial-statements also failed both — structured data parsing remains a shared weakness.',
+                tag: "Common Failure",
+                tagColor: "#ef4444",
+                title: "Regime Detection is the Bottleneck",
+                body: "Both models fail regime-riskparity-cvar, regime-cta-vol-target, and sentiment-factor-alpha. Tasks requiring multi-step numerical pipelines with cascading state (eigenvalue → regime → portfolio) remain unsolved.",
               },
               {
-                tag: 'Coming Soon',
-                tagColor: '#52525b',
-                title: 'Finance-Zero Baseline Pending',
-                body: 'No single-call baseline data yet. Finance-Zero makes one LLM call, runs one script, no iteration. If it passes a task, that task is disqualified as too easy. Planned: Gemini 2.0 Flash as baseline model.',
+                tag: "Task Insight",
+                tagColor: "#f97316",
+                title: "Easy Tasks Confirm Calibration",
+                body: "Both Opus and Sonnet pass all easy/medium tasks (fama-french, momentum, bollinger). Hard tasks separate the models: Opus uniquely passes kelly-var-sizing and mc-greeks-surface; Sonnet times out on hull-white-swaption.",
               },
             ].map((item) => (
               <div
