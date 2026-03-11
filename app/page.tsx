@@ -492,6 +492,65 @@ export default function Home() {
             })}
           </div>
 
+          {/* ─── Bar Chart ─── */}
+          <div className="mb-14">
+            <p className="font-mono text-[11px] text-[#3f3f46] uppercase tracking-widest mb-6">
+              Pass Rate Comparison
+            </p>
+            <div className="space-y-3">
+              {leaderboard.map((entry, i) => {
+                const colors = ['#00ff88', '#52c4ff', '#f97316', '#a855f7']
+                const color = colors[i] ?? '#52525b'
+                const isLeader = entry.rank === 1
+                return (
+                  <div key={entry.rank} className="flex items-center gap-4">
+                    {/* Model name */}
+                    <div className="w-40 shrink-0 text-right">
+                      <span className={`font-mono text-xs truncate block ${isLeader ? 'text-white' : 'text-[#a1a1aa]'}`}>
+                        {entry.model}
+                      </span>
+                    </div>
+                    {/* Bar track */}
+                    <div className="flex-1 h-8 bg-[#111113] rounded-md border border-[#1e1e24] overflow-hidden relative">
+                      <div
+                        className="h-full rounded-md transition-all duration-700"
+                        style={{
+                          width: `${entry.passRate}%`,
+                          backgroundColor: color,
+                          opacity: 0.85,
+                        }}
+                      />
+                      {/* Tick marks at 25%, 50%, 75% */}
+                      {[25, 50, 75].map((tick) => (
+                        <div
+                          key={tick}
+                          className="absolute top-0 bottom-0 w-px bg-[#27272a]"
+                          style={{ left: `${tick}%` }}
+                        />
+                      ))}
+                    </div>
+                    {/* Score label */}
+                    <div className="w-28 shrink-0 flex items-center gap-1.5">
+                      <span className="font-mono text-sm font-bold" style={{ color }}>
+                        {entry.passRate}%
+                      </span>
+                      <span className="font-mono text-xs text-[#52525b]">
+                        {entry.pass}/{entry.tasks}
+                        {entry.tasks < 14 && <span className="text-[#3f3f46]"> tested</span>}
+                      </span>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            {/* X-axis labels */}
+            <div className="flex ml-44 mr-32 mt-1.5 justify-between">
+              {[0, 25, 50, 75, 100].map((v) => (
+                <span key={v} className="font-mono text-[10px] text-[#3f3f46]">{v}%</span>
+              ))}
+            </div>
+          </div>
+
           {/* Heatmap matrix */}
           <div className="mb-2">
             <p className="font-mono text-[11px] text-[#3f3f46] uppercase tracking-widest mb-5">
