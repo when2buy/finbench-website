@@ -1023,7 +1023,7 @@ harbor run --path ./tasks \
               {
                 emoji: '🤖',
                 title: 'Evaluate a Model',
-                body: 'Run any agent on all 14 tasks and submit your results. Help us expand the leaderboard beyond the current 4 models.',
+                body: 'Run any agent on all tasks and submit your results. Help us expand the leaderboard beyond the current models.',
                 href: `${repoUrl}/blob/main/docs/model_reference.md`,
                 label: 'Model reference →',
               },
