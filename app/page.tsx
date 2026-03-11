@@ -285,7 +285,7 @@ export default function Home() {
                 <a href="#run" className="hover:text-white transition-colors duration-200">Run</a>
                 <a href="#next" className="hover:text-white transition-colors duration-200">What&apos;s Next</a>
                 <a href="#contributors" className="hover:text-white transition-colors duration-200">Contributors</a>
-                <a href="#docs" className="hover:text-white transition-colors duration-200">Docs</a>
+                <a href="#docs" className="hover:text-white transition-colors duration-200">Contribute</a>
               </div>
               <a
                 href="https://github.com/QF-Bench/QuantitativeFinance-Bench"
@@ -319,7 +319,7 @@ export default function Home() {
               <a href="#run" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors duration-200">Run</a>
               <a href="#next" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors duration-200">What&apos;s Next</a>
               <a href="#contributors" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors duration-200">Contributors</a>
-              <a href="#docs" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors duration-200">Docs</a>
+              <a href="#docs" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors duration-200">Contribute</a>
             </div>
           )}
         </nav>
@@ -1003,18 +1003,58 @@ harbor run --path ./tasks \
         {/* Divider */}
         <div className="h-px divider-subtle" aria-hidden="true" />
 
-        {/* ─── Docs ─── */}
+        {/* ─── How to Contribute ─── */}
         <section id="docs" className="max-w-5xl mx-auto px-6 py-24">
-          <h2 className="text-2xl font-semibold mb-1 tracking-tight">Docs</h2>
+          <h2 className="text-2xl font-semibold mb-1 tracking-tight">How to Contribute</h2>
           <p className="text-base text-[#a1a1aa] mb-10">
-            How to contribute tasks to QFBench — crowdsourcing guidelines and task format.
+            QFBench is community-built. Every task on this leaderboard was contributed by the community — yours could be next.
           </p>
+
+          {/* CTA cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-14">
+            {[
+              {
+                emoji: '🧪',
+                title: 'Submit a Task',
+                body: 'Design a hard quant problem, write the verifier, and open a PR. Three merged tasks = authorship on the paper.',
+                href: `${repoUrl}/blob/main/docs/task_contribution.md`,
+                label: 'Contribution guide →',
+              },
+              {
+                emoji: '🤖',
+                title: 'Evaluate a Model',
+                body: 'Run any agent on all 14 tasks and submit your results. Help us expand the leaderboard beyond the current 4 models.',
+                href: `${repoUrl}/blob/main/docs/model_reference.md`,
+                label: 'Model reference →',
+              },
+              {
+                emoji: '💬',
+                title: 'Join the Community',
+                body: 'Found a bug? Have a task idea? Want to co-author? Open an issue or start a discussion on GitHub.',
+                href: `${repoUrl}/issues`,
+                label: 'Open an issue →',
+              },
+            ].map((card) => (
+              <a
+                key={card.title}
+                href={card.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-xl px-5 py-5 border border-[#1e1e24] bg-[#111113]/40 hover:border-[#00ff88]/30 hover:bg-[#00ff88]/[0.02] transition-colors duration-200 block group"
+              >
+                <span className="text-2xl mb-3 block">{card.emoji}</span>
+                <h3 className="text-sm font-semibold mb-2 group-hover:text-white transition-colors">{card.title}</h3>
+                <p className="text-sm text-[#71717a] leading-relaxed mb-4">{card.body}</p>
+                <span className="font-mono text-xs text-[#00ff88]">{card.label}</span>
+              </a>
+            ))}
+          </div>
 
           <div className="space-y-10 text-base">
             <div>
-              <h3 className="font-semibold text-[#a1a1aa] mb-2 font-mono text-xs uppercase tracking-wider">Contributing</h3>
+              <h3 className="font-semibold text-[#a1a1aa] mb-2 font-mono text-xs uppercase tracking-wider">What makes a good task?</h3>
               <p className="text-[#a1a1aa] leading-relaxed mb-3">
-                QFBench is a state-aware, interactive benchmark for financial agent tasks. We welcome task contributions that require real quant work: numerical methods, dirty data, and verifiable outputs. See the full guide on GitHub for step-by-step instructions.
+                QFBench tasks must require real quant expertise: numerical methods, dirty data, and verifiable outputs. Not trivia — real professional workflows that a senior quant would recognize. See the full guide for design principles and examples.
               </p>
               <a
                 href={`${repoUrl}/blob/main/docs/task_contribution.md`}
