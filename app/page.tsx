@@ -74,6 +74,56 @@ export default function Home() {
         "structured-note-risk": false,
       },
     },
+    {
+      rank: 3,
+      model: "claude-haiku-4-5",
+      agent: "claude-code",
+      tasks: 7,
+      pass: 2,
+      passRate: 29,
+      date: "2026-03-08",
+      taskResults: {
+        "american-option-fd-new": false,
+        "barrier-garch-var": null,
+        "bollinger-backtest-aapl": false,
+        "cta-basel-capital": null,
+        "fama-french-factor-model-new": true,
+        "hull-white-swaption": false,
+        "kelly-var-sizing": null,
+        "mc-greeks-surface": false,
+        "momentum-backtest": true,
+        "regime-cta-vol-target": null,
+        "regime-riskparity-cvar": null,
+        "sentiment-factor-alpha": null,
+        "stochvol-implied-surface-new": false,
+        "structured-note-risk": null,
+      },
+    },
+    {
+      rank: 4,
+      model: "gemini-2.5-pro",
+      agent: "gemini-cli",
+      tasks: 7,
+      pass: 0,
+      passRate: 0,
+      date: "2026-03-06",
+      taskResults: {
+        "american-option-fd-new": null,
+        "barrier-garch-var": false,
+        "bollinger-backtest-aapl": null,
+        "cta-basel-capital": false,
+        "fama-french-factor-model-new": null,
+        "hull-white-swaption": null,
+        "kelly-var-sizing": false,
+        "mc-greeks-surface": null,
+        "momentum-backtest": null,
+        "regime-cta-vol-target": false,
+        "regime-riskparity-cvar": false,
+        "sentiment-factor-alpha": false,
+        "stochvol-implied-surface-new": null,
+        "structured-note-risk": false,
+      },
+    },
   ]
 
   const tasks = [
@@ -421,6 +471,9 @@ export default function Home() {
                     </span>
                     <span className="font-mono text-sm text-[#52525b]">
                       {entry.pass}&thinsp;/&thinsp;{entry.tasks}
+                      {entry.tasks < 14 && (
+                        <span className="font-mono text-[10px] text-[#3f3f46] ml-1">tested</span>
+                      )}
                     </span>
                   </div>
 
@@ -489,17 +542,21 @@ export default function Home() {
 
                   {/* Task cells */}
                   {tasks.map((task) => {
-                    const passed =
+                    const result =
                       entry.taskResults[task.id as keyof typeof entry.taskResults]
+                    const cellClass =
+                      result === true
+                        ? 'bg-[#00ff88]/20 border border-[#00ff88]/10 hover:bg-[#00ff88]/30 hover:border-[#00ff88]/25'
+                        : result === false
+                        ? 'bg-[#18181b] border border-[#27272a]/40 hover:bg-[#1f1f23] hover:border-[#27272a]'
+                        : 'bg-[#111113] border border-[#27272a]/20 opacity-40'
+                    const cellTitle =
+                      result === true ? 'Pass' : result === false ? 'Fail' : 'Not tested'
                     return (
                       <div
                         key={task.id}
-                        className={`h-9 rounded-[3px] transition-all duration-200 cursor-default ${
-                          passed
-                            ? 'bg-[#00ff88]/20 border border-[#00ff88]/10 hover:bg-[#00ff88]/30 hover:border-[#00ff88]/25'
-                            : 'bg-[#18181b] border border-[#27272a]/40 hover:bg-[#1f1f23] hover:border-[#27272a]'
-                        }`}
-                        title={`${task.id}: ${passed ? 'Pass' : 'Fail'}`}
+                        className={`h-9 rounded-[3px] transition-all duration-200 cursor-default ${cellClass}`}
+                        title={`${task.id}: ${cellTitle}`}
                       />
                     )
                   })}
@@ -525,6 +582,10 @@ export default function Home() {
                 <div className="flex items-center gap-1.5">
                   <div className="w-3 h-3 rounded-sm bg-[#18181b] border border-[#27272a]/40" />
                   <span className="font-mono text-[10px] text-[#52525b]">Fail</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-3 h-3 rounded-sm bg-[#111113] border border-[#27272a]/20 opacity-40" />
+                  <span className="font-mono text-[10px] text-[#52525b]">Not tested</span>
                 </div>
                 <div className="flex-1" />
                 {(['very_hard', 'hard', 'medium-hard', 'medium', 'easy'] as const).map((d) => (
