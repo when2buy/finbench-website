@@ -22,6 +22,19 @@ const TASK_FORMAT_DIAGRAM = [
   _pad('    \\-- solve.sh', '# Reference (oracle) solution'),
 ].join('\n')
 
+const newsItems = [
+  {
+    id: 'N-001',
+    title: 'Weekly QFBench Discussion Is Open to Everyone',
+    date: '2026-04-18',
+    summary: 'Join our weekly discussion to talk about benchmark progress, quantitative finance tasks, and upcoming evaluation updates.',
+    body: 'We welcome everyone to join our weekly QFBench discussion. This is a casual working session for benchmark updates, ideas, and community feedback.',
+    meetingLink: 'https://meet.google.com/oyz-oyky-urc',
+    meetingTime: 'Saturday 4:00 PM PST',
+    status: 'New',
+  },
+]
+
 export default function Home() {
   const leaderboard = [
     {
@@ -284,6 +297,7 @@ export default function Home() {
                 <a href="#tasks" className="hover:text-white transition-colors duration-200">Tasks</a>
                 <a href="#run" className="hover:text-white transition-colors duration-200">Run</a>
                 <a href="#next" className="hover:text-white transition-colors duration-200">What&apos;s Next</a>
+                <a href="#news" className="hover:text-white transition-colors duration-200">News</a>
                 <a href="#contributors" className="hover:text-white transition-colors duration-200">Contributors</a>
                 <a href="#docs" className="hover:text-white transition-colors duration-200">Contribute</a>
               </div>
@@ -318,6 +332,7 @@ export default function Home() {
               <a href="#tasks" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors duration-200">Tasks</a>
               <a href="#run" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors duration-200">Run</a>
               <a href="#next" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors duration-200">What&apos;s Next</a>
+              <a href="#news" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors duration-200">News</a>
               <a href="#contributors" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors duration-200">Contributors</a>
               <a href="#docs" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors duration-200">Contribute</a>
             </div>
@@ -909,6 +924,44 @@ harbor run --path ./tasks \
                 <p className="font-mono font-semibold text-[15px] mb-1 pr-20">{item.model}</p>
                 <p className="font-mono text-sm text-[#a1a1aa]">{item.agent}</p>
               </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Divider */}
+        <div className="h-px divider-subtle" aria-hidden="true" />
+
+        {/* ─── News ─── */}
+        <section id="news" className="max-w-5xl mx-auto px-6 py-24">
+          <h2 className="text-2xl font-semibold mb-1 tracking-tight">News</h2>
+          <p className="text-base text-[#a1a1aa] mb-10">Latest updates from the QFBench project</p>
+
+          <div className="grid grid-cols-1 gap-4">
+            {newsItems.map((item) => (
+              <article
+                key={item.id}
+                className="rounded-xl p-5 border border-[#1e1e24] bg-[#111113] hover:border-[#3f3f46] transition-colors duration-200"
+              >
+                <div className="flex flex-wrap items-center gap-3 mb-3">
+                  <span className="font-mono text-xs text-[#00ff88]">{item.id}</span>
+                  <span className="font-mono text-[11px] px-1.5 py-0.5 rounded border text-[#00ff88] bg-[#00ff88]/10 border-[#00ff88]/20">
+                    {item.status}
+                  </span>
+                  <span className="font-mono text-xs text-[#52525b]">{item.date}</span>
+                </div>
+                <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+                <p className="text-sm text-[#a1a1aa] leading-relaxed mb-4">{item.summary}</p>
+                <div className="rounded-lg border border-[#1e1e24] bg-[#0d0d10] p-4 space-y-2 text-sm">
+                  <p className="text-[#d4d4d8]">{item.body}</p>
+                  <p className="font-mono text-[#a1a1aa]">
+                    Meeting link:{' '}
+                    <a href={item.meetingLink} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline break-all">
+                      {item.meetingLink}
+                    </a>
+                  </p>
+                  <p className="font-mono text-[#a1a1aa]">Meeting time: {item.meetingTime}</p>
+                </div>
+              </article>
             ))}
           </div>
         </section>
