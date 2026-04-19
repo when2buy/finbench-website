@@ -1,5 +1,7 @@
 'use client'
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
+import { getLatestNews } from './lib/news'
 
 // Task format diagram: ASCII tree, padded so "#" aligns at column 46
 const _pad = (s: string, comment: string) => s + ' '.repeat(46 - s.length) + comment
@@ -22,20 +24,8 @@ const TASK_FORMAT_DIAGRAM = [
   _pad('    \\-- solve.sh', '# Reference (oracle) solution'),
 ].join('\n')
 
-const newsItems = [
-  {
-    id: 'N-001',
-    title: 'Weekly QFBench Discussion Is Open to Everyone',
-    date: '2026-04-18',
-    summary: 'Join our weekly discussion to talk about benchmark progress, quantitative finance tasks, and upcoming evaluation updates.',
-    body: 'We welcome everyone to join our weekly QFBench discussion. This is a casual working session for benchmark updates, ideas, and community feedback.',
-    meetingLink: 'https://meet.google.com/oyz-oyky-urc',
-    meetingTime: 'Saturday 4:00 PM PST',
-    status: 'New',
-  },
-]
-
 export default function Home() {
+  const latestNews = getLatestNews(3)
   const leaderboard = [
     {
       rank: 1,
@@ -933,11 +923,18 @@ harbor run --path ./tasks \
 
         {/* ─── News ─── */}
         <section id="news" className="max-w-5xl mx-auto px-6 py-24">
-          <h2 className="text-2xl font-semibold mb-1 tracking-tight">News</h2>
-          <p className="text-base text-[#a1a1aa] mb-10">Latest updates from the QFBench project</p>
+          <div className="flex items-end justify-between gap-4 mb-10">
+            <div>
+              <h2 className="text-2xl font-semibold mb-1 tracking-tight">Latest News</h2>
+              <p className="text-base text-[#a1a1aa]">Latest updates from the QFBench project</p>
+            </div>
+            <Link href="/news" className="text-sm font-medium text-[#00ff88] hover:text-white transition-colors duration-200">
+              View all news →
+            </Link>
+          </div>
 
           <div className="grid grid-cols-1 gap-4">
-            {newsItems.map((item) => (
+            {latestNews.map((item) => (
               <article
                 key={item.id}
                 className="rounded-xl p-5 border border-[#1e1e24] bg-[#111113] hover:border-[#3f3f46] transition-colors duration-200"
@@ -952,14 +949,22 @@ harbor run --path ./tasks \
                 <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
                 <p className="text-sm text-[#a1a1aa] leading-relaxed mb-4">{item.summary}</p>
                 <div className="rounded-lg border border-[#1e1e24] bg-[#0d0d10] p-4 space-y-2 text-sm">
-                  <p className="text-[#d4d4d8]">{item.body}</p>
-                  <p className="font-mono text-[#a1a1aa]">
-                    Meeting link:{' '}
-                    <a href={item.meetingLink} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline break-all">
-                      {item.meetingLink}
-                    </a>
-                  </p>
-                  <p className="font-mono text-[#a1a1aa]">Meeting time: {item.meetingTime}</p>
+                  <p className="text-[#d4d4d8]">{item.body[0]}</p>
+                  {item.meetingLink ? (
+                    <p className="font-mono text-[#a1a1aa]">
+                      Meeting link:{' '}
+                      <a href={item.meetingLink} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline break-all">
+                        {item.meetingLink}
+                      </a>
+                    </p>
+                  ) : null}
+                  {item.meetingTime ? <p className="font-mono text-[#a1a1aa]">Meeting time: {item.meetingTime}</p> : null}
+                </div>
+                <div className="mt-4">
+                  <Link href={`/news/${item.id}`} className="inline-flex items-center gap-2 text-sm font-medium text-[#00ff88] hover:text-white transition-colors duration-200">
+                    Read full update
+                    <span aria-hidden="true">→</span>
+                  </Link>
                 </div>
               </article>
             ))}
