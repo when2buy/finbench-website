@@ -11,6 +11,19 @@ export type NewsItem = {
 
 export const newsItems: NewsItem[] = [
   {
+    id: 'N-002',
+    title: 'QFBench Expands to 87 Merged Tasks',
+    date: '2026-05-04',
+    summary:
+      'The benchmark repository has grown to 87 merged quantitative finance tasks, with the full 90-task milestone now in sight.',
+    body: [
+      'QFBench main now includes 87 merged tasks across derivatives pricing, risk, market microstructure, factor research, credit, crypto, and event-driven workflows.',
+      'Recent additions include stable-residual, residual-momentum, double-sort, prediction-markets-cross-venue-dislocation, multimodal-alpha-fusion-edgar-cot-gdelt, barone-adesi-whaley, cir-bond-pricing, and event-study-earnings.',
+      'The website task catalog is connected directly to the GitHub repository, so merged tasks appear with their task.toml difficulty metadata. The leaderboard remains a calibration view until the expanded model evaluation sweep is complete.',
+    ],
+    status: 'Dataset',
+  },
+  {
     id: 'N-001',
     title: 'Weekly QFBench Discussion Is Open to Everyone',
     date: '2026-04-18',

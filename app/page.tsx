@@ -24,6 +24,11 @@ const TASK_FORMAT_DIAGRAM = [
   _pad('    \\-- solve.sh', '# Reference (oracle) solution'),
 ].join('\n')
 
+const CURRENT_TASK_COUNT = 87
+const TARGET_TASK_COUNT = 90
+const CALIBRATION_TASK_COUNT = 14
+const EVALUATED_MODEL_COUNT = 4
+
 export default function Home() {
   const latestNews = getLatestNews(3)
   const leaderboard = [
@@ -158,8 +163,6 @@ export default function Home() {
 
   useEffect(() => {
     let cancelled = false
-    setRepoTasksLoading(true)
-    setRepoTasksError(null)
     fetch('https://api.github.com/repos/QF-Bench/QuantitativeFinance-Bench/contents/tasks')
       .then((r) => {
         if (!r.ok) throw new Error(`Tasks API: ${r.status}`)
@@ -215,8 +218,6 @@ export default function Home() {
 
   useEffect(() => {
     let cancelled = false
-    setContributorsLoading(true)
-    setContributorsError(null)
     const map = new Map<string, Contributor>()
     const add = (list: { login: string; avatar_url: string; type: string }[], repo: 'bench' | 'website') => {
       list
@@ -353,10 +354,10 @@ export default function Home() {
 
           {/* Stats */}
           <div className="flex flex-wrap items-center gap-2 font-mono text-sm mb-10">
-            <span className="text-[#00ff88]">{repoTasksLoading ? '—' : repoTasks.length}</span>
+            <span className="text-[#00ff88]">{repoTasksLoading ? CURRENT_TASK_COUNT : repoTasks.length}</span>
             <span className="text-[#71717a]">Tasks</span>
             <span className="text-[#27272a] mx-2">/</span>
-            <span className="text-[#00ff88]">x</span>
+            <span className="text-[#00ff88]">{EVALUATED_MODEL_COUNT}</span>
             <span className="text-[#71717a]">Models</span>
             <span className="text-[#27272a] mx-2">/</span>
             <span className="text-[#00ff88]">Pass/Fail</span>
@@ -443,7 +444,7 @@ export default function Home() {
           </div>
 
           <p className="text-base text-[#a1a1aa] mb-10">
-            Agent performance ranked by pass rate across {tasks.length} calibration tasks
+            Agent performance ranked by pass rate across {CALIBRATION_TASK_COUNT} calibration tasks
           </p>
 
           {/* Model ranking cards */}
@@ -476,7 +477,7 @@ export default function Home() {
                     </span>
                     <span className="font-mono text-sm text-[#52525b]">
                       {entry.pass}&thinsp;/&thinsp;{entry.tasks}
-                      {entry.tasks < 14 && (
+                      {entry.tasks < CALIBRATION_TASK_COUNT && (
                         <span className="font-mono text-[10px] text-[#3f3f46] ml-1">tested</span>
                       )}
                     </span>
@@ -541,7 +542,7 @@ export default function Home() {
                       </span>
                       <span className="font-mono text-xs text-[#52525b]">
                         {entry.pass}/{entry.tasks}
-                        {entry.tasks < 14 && <span className="text-[#3f3f46]"> tested</span>}
+                        {entry.tasks < CALIBRATION_TASK_COUNT && <span className="text-[#3f3f46]"> tested</span>}
                       </span>
                     </div>
                   </div>
@@ -669,7 +670,7 @@ export default function Home() {
 
           {/* Single-run note */}
           <p className="font-mono text-[11px] text-[#3f3f46] mt-6 pt-5 border-t border-[#1e1e24]">
-            Each model was evaluated once. Results are single-run — statistical significance requires ≥5 runs per task. Finance-Zero baseline pending.
+            Each model was evaluated once on the calibration set. Results are single-run — statistical significance requires ≥5 runs per task. The full merged task catalog is now approaching the 90-task target.
           </p>
         </section>
 
@@ -733,7 +734,7 @@ export default function Home() {
             {repoTasksLoading && 'Loading tasks from main…'}
             {repoTasksError && !repoTasks.length && <span className="text-[#ef4444]">{repoTasksError}</span>}
             {!repoTasksLoading && !repoTasksError && (
-              <>Tasks merged to main on <a href={tasksDirUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">QFBench</a>. Difficulty from <code className="text-[#71717a]">task.toml</code>.</>
+              <>{repoTasks.length} tasks merged to main on <a href={tasksDirUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">QFBench</a>. Difficulty from <code className="text-[#71717a]">task.toml</code>.</>
             )}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -887,15 +888,15 @@ harbor run --path ./tasks \
         {/* ─── What's Next ─── */}
         <section id="next" className="max-w-5xl mx-auto px-6 py-24">
           <h2 className="text-2xl font-semibold mb-1 tracking-tight">What&apos;s Next</h2>
-          <p className="text-base text-[#a1a1aa] mb-10">Expanding the leaderboard with more models and a baseline</p>
+          <p className="text-base text-[#a1a1aa] mb-10">Expanding from the 14-task calibration set to the full merged benchmark</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { model: 'GPT-4o', agent: 'codex-cli', status: 'Planned', statusColor: '#52525b' },
-              { model: 'o3', agent: 'codex-cli', status: 'Planned', statusColor: '#52525b' },
-              { model: 'Gemini 2.5 Pro', agent: 'gemini-cli', status: 'Planned', statusColor: '#52525b' },
+              { model: 'GPT-5 / Codex', agent: 'codex-cli', status: 'Planned', statusColor: '#52525b' },
+              { model: 'Claude Opus 4.6', agent: 'claude-code', status: 'Calibration Done', statusColor: '#00ff88' },
+              { model: 'Gemini 2.5 Pro', agent: 'gemini-cli', status: 'Partial Run', statusColor: '#f97316' },
               { model: 'Finance-Zero Baseline', agent: 'gemini-2.0-flash', status: 'In Progress', statusColor: '#f97316' },
-              { model: 'Full 90 Tasks', agent: 'all models', status: 'Coming Soon', statusColor: '#3f3f46' },
+              { model: `Full ${TARGET_TASK_COUNT} Tasks`, agent: 'all models', status: `${CURRENT_TASK_COUNT}/${TARGET_TASK_COUNT} Merged`, statusColor: '#00ff88' },
             ].map((item) => (
               <div
                 key={item.model}
@@ -981,7 +982,7 @@ harbor run --path ./tasks \
             Thank you to everyone who has contributed to the benchmark or this website. Sourced from{' '}
             <a href={repoUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">QFBench</a>
             {' and '}
-            <a href={websiteRepoUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">quantitativefinance-bench-website</a>.
+            <a href={websiteRepoUrl} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">finbench-website</a>.
           </p>
           {contributorsLoading && (
             <p className="font-mono text-sm text-[#a1a1aa] mb-8">Loading contributors…</p>
@@ -1206,7 +1207,7 @@ harbor run --path ./tasks \
         <footer className="max-w-5xl mx-auto px-6 py-12">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <p className="text-sm text-[#3f3f46]">
-              Showing 10 of 90 tasks. Built on{' '}
+              Live task catalog from GitHub: {repoTasksLoading ? CURRENT_TASK_COUNT : repoTasks.length} of {TARGET_TASK_COUNT} target tasks merged. Built on{' '}
               <a
                 href="https://github.com/laude-institute/harbor"
                 className="text-[#71717a] hover:text-[#a1a1aa] transition-colors duration-200 cursor-pointer"
