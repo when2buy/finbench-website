@@ -26,129 +26,82 @@ const TASK_FORMAT_DIAGRAM = [
 
 const CURRENT_TASK_COUNT = 87
 const TARGET_TASK_COUNT = 90
-const CALIBRATION_TASK_COUNT = 14
-const EVALUATED_MODEL_COUNT = 4
+const CLI_LEADERBOARD_TASK_COUNT = 80
+const FINANCE_ZERO_TASK_COUNT = 83
+const EVALUATED_MODEL_COUNT = 7
 
 export default function Home() {
   const latestNews = getLatestNews(3)
   const leaderboard = [
     {
       rank: 1,
-      model: "claude-opus-4-6",
-      agent: "claude-code",
-      tasks: 14,
-      pass: 7,
-      passRate: 50,
-      date: "2026-03-07",
-      taskResults: {
-        "american-option-fd-new": true,
-        "barrier-garch-var": false,
-        "bollinger-backtest-aapl": true,
-        "cta-basel-capital": false,
-        "fama-french-factor-model-new": true,
-        "hull-white-swaption": false,
-        "kelly-var-sizing": true,
-        "mc-greeks-surface": true,
-        "momentum-backtest": true,
-        "regime-cta-vol-target": false,
-        "regime-riskparity-cvar": false,
-        "sentiment-factor-alpha": false,
-        "stochvol-implied-surface-new": true,
-        "structured-note-risk": false,
-      },
+      model: 'GPT-5.5',
+      agent: 'codex-cli',
+      tasks: CLI_LEADERBOARD_TASK_COUNT,
+      passRate: 61.7,
+      passAt3: 66.2,
+      date: '2026-05-04',
     },
     {
       rank: 2,
-      model: "claude-sonnet-4-6",
-      agent: "claude-code",
-      tasks: 14,
-      pass: 5,
-      passRate: 36,
-      date: "2026-03-07",
-      taskResults: {
-        "american-option-fd-new": true,
-        "barrier-garch-var": false,
-        "bollinger-backtest-aapl": true,
-        "cta-basel-capital": false,
-        "fama-french-factor-model-new": true,
-        "hull-white-swaption": false,
-        "kelly-var-sizing": false,
-        "mc-greeks-surface": false,
-        "momentum-backtest": true,
-        "regime-cta-vol-target": false,
-        "regime-riskparity-cvar": false,
-        "sentiment-factor-alpha": false,
-        "stochvol-implied-surface-new": true,
-        "structured-note-risk": false,
-      },
+      model: 'GPT-5.3-codex',
+      agent: 'codex-cli',
+      tasks: CLI_LEADERBOARD_TASK_COUNT,
+      passRate: 60.8,
+      passAt3: 67.5,
+      date: '2026-05-04',
     },
     {
       rank: 3,
-      model: "claude-haiku-4-5",
-      agent: "claude-code",
-      tasks: 7,
-      pass: 2,
-      passRate: 29,
-      date: "2026-03-08",
-      taskResults: {
-        "american-option-fd-new": false,
-        "barrier-garch-var": null,
-        "bollinger-backtest-aapl": false,
-        "cta-basel-capital": null,
-        "fama-french-factor-model-new": true,
-        "hull-white-swaption": false,
-        "kelly-var-sizing": null,
-        "mc-greeks-surface": false,
-        "momentum-backtest": true,
-        "regime-cta-vol-target": null,
-        "regime-riskparity-cvar": null,
-        "sentiment-factor-alpha": null,
-        "stochvol-implied-surface-new": false,
-        "structured-note-risk": null,
-      },
+      model: 'claude-opus-4-6',
+      agent: 'claude-code',
+      tasks: CLI_LEADERBOARD_TASK_COUNT,
+      passRate: 59.2,
+      passAt3: 65.0,
+      date: '2026-05-04',
     },
     {
       rank: 4,
-      model: "gemini-2.5-pro",
-      agent: "gemini-cli",
-      tasks: 7,
-      pass: 0,
-      passRate: 0,
-      date: "2026-03-06",
-      taskResults: {
-        "american-option-fd-new": null,
-        "barrier-garch-var": false,
-        "bollinger-backtest-aapl": null,
-        "cta-basel-capital": false,
-        "fama-french-factor-model-new": null,
-        "hull-white-swaption": null,
-        "kelly-var-sizing": false,
-        "mc-greeks-surface": null,
-        "momentum-backtest": null,
-        "regime-cta-vol-target": false,
-        "regime-riskparity-cvar": false,
-        "sentiment-factor-alpha": false,
-        "stochvol-implied-surface-new": null,
-        "structured-note-risk": false,
-      },
+      model: 'GPT-5.4',
+      agent: 'codex-cli',
+      tasks: CLI_LEADERBOARD_TASK_COUNT,
+      passRate: 57.5,
+      passAt3: 63.7,
+      date: '2026-05-04',
+    },
+    {
+      rank: 5,
+      model: 'GPT-5.4-mini',
+      agent: 'codex-cli',
+      tasks: CLI_LEADERBOARD_TASK_COUNT,
+      passRate: 57.1,
+      passAt3: 68.8,
+      date: '2026-05-04',
+    },
+    {
+      rank: 6,
+      model: 'claude-sonnet-4-5',
+      agent: 'claude-code',
+      tasks: CLI_LEADERBOARD_TASK_COUNT,
+      passRate: 46.2,
+      passAt3: 60.0,
+      date: '2026-05-04',
+    },
+    {
+      rank: 7,
+      model: 'claude-haiku-4-5',
+      agent: 'claude-code',
+      tasks: CLI_LEADERBOARD_TASK_COUNT,
+      passRate: 20.8,
+      passAt3: 31.2,
+      date: '2026-05-04',
     },
   ]
 
-  const tasks = [
-    { id: "american-option-fd-new", abbr: "AOF", difficulty: "hard" as const, expertTime: "45 min", description: "Price American options via finite-difference PDE methods with early exercise boundary detection." },
-    { id: "barrier-garch-var", abbr: "BGV", difficulty: "hard" as const, expertTime: "50 min", description: "Model barrier option pricing combined with GARCH volatility estimation and VaR computation." },
-    { id: "bollinger-backtest-aapl", abbr: "BBA", difficulty: "medium" as const, expertTime: "30 min", description: "Implement and backtest a Bollinger Band strategy on AAPL historical data with transaction costs." },
-    { id: "cta-basel-capital", abbr: "CBC", difficulty: "hard" as const, expertTime: "60 min", description: "Compute CTA strategy risk metrics and Basel III regulatory capital requirements." },
-    { id: "fama-french-factor-model-new", abbr: "FFM", difficulty: "easy" as const, expertTime: "20 min", description: "Estimate Fama-French three-factor model exposures via OLS regression on equity returns." },
-    { id: "hull-white-swaption", abbr: "HWS", difficulty: "very_hard" as const, expertTime: "75 min", description: "Price swaptions using the Hull-White one-factor interest rate model with analytical formulas." },
-    { id: "kelly-var-sizing", abbr: "KVS", difficulty: "medium" as const, expertTime: "35 min", description: "Derive Kelly-optimal position sizes incorporating VaR constraints and portfolio correlation." },
-    { id: "mc-greeks-surface", abbr: "MGS", difficulty: "hard" as const, expertTime: "75 min", description: "Compute option Greeks surface via Monte Carlo using finite-difference, pathwise, and likelihood-ratio methods." },
-    { id: "momentum-backtest", abbr: "MOM", difficulty: "easy" as const, expertTime: "20 min", description: "Cross-sectional momentum factor backtest with monthly rebalancing and transaction cost modeling." },
-    { id: "regime-cta-vol-target", abbr: "RCV", difficulty: "medium" as const, expertTime: "40 min", description: "Detect market regimes and apply volatility targeting to a CTA strategy with dynamic position sizing." },
-    { id: "regime-riskparity-cvar", abbr: "RRC", difficulty: "hard" as const, expertTime: "60 min", description: "Regime-conditional risk-parity portfolio construction with CVaR optimization and eigenvalue analysis." },
-    { id: "sentiment-factor-alpha", abbr: "SFA", difficulty: "hard" as const, expertTime: "55 min", description: "Build a sentiment-based alpha factor from text data and evaluate its predictive power for returns." },
-    { id: "stochvol-implied-surface-new", abbr: "SIS", difficulty: "hard" as const, expertTime: "50 min", description: "Calibrate a stochastic volatility model and generate the full implied volatility surface." },
-    { id: "structured-note-risk", abbr: "SNR", difficulty: "hard" as const, expertTime: "55 min", description: "Price and risk-manage a structured note combining equity-linked payoffs with credit risk." },
+  const financeZeroLeaderboard = [
+    { rank: 1, model: 'Finance-Zero Opus 4.6', passRate: 24.7, passAt3: 31.3 },
+    { rank: 2, model: 'Finance-Zero Sonnet 4.5', passRate: 15.0, passAt3: 18.1 },
+    { rank: 3, model: 'Finance-Zero Haiku 4.5', passRate: 11.6, passAt3: 13.3 },
   ]
 
   const [menuOpen, setMenuOpen] = useState(false)
@@ -410,7 +363,7 @@ export default function Home() {
                 tag: 'Quality Control',
                 tagColor: '#00ff88',
                 title: 'The Finance-Zero Rule',
-                body: 'A non-agentic baseline: one LLM call, one script, one run. If Finance-Zero passes a task, that task is too easy and gets removed. Every task shown here has defeated Finance-Zero.',
+                body: 'A non-agentic baseline: one LLM call, one script, one run. V11 tracks it separately so agentic CLI results are compared against a transparent single-shot baseline.',
               },
             ].map((item) => (
               <div
@@ -444,7 +397,7 @@ export default function Home() {
           </div>
 
           <p className="text-base text-[#a1a1aa] mb-10">
-            Agent performance ranked by pass rate across {CALIBRATION_TASK_COUNT} calibration tasks
+            Agent performance ranked by pass@1 across {CLI_LEADERBOARD_TASK_COUNT} tasks with complete 3-run CLI coverage
           </p>
 
           {/* Model ranking cards */}
@@ -476,10 +429,7 @@ export default function Home() {
                       {entry.passRate}%
                     </span>
                     <span className="font-mono text-sm text-[#52525b]">
-                      {entry.pass}&thinsp;/&thinsp;{entry.tasks}
-                      {entry.tasks < CALIBRATION_TASK_COUNT && (
-                        <span className="font-mono text-[10px] text-[#3f3f46] ml-1">tested</span>
-                      )}
+                      pass@3 {entry.passAt3}%
                     </span>
                   </div>
 
@@ -501,11 +451,11 @@ export default function Home() {
           {/* ─── Bar Chart ─── */}
           <div className="mb-14">
             <p className="font-mono text-[11px] text-[#3f3f46] uppercase tracking-widest mb-6">
-              Pass Rate Comparison
+              pass@1 comparison
             </p>
             <div className="space-y-3">
               {leaderboard.map((entry, i) => {
-                const colors = ['#00ff88', '#52c4ff', '#f97316', '#a855f7']
+                const colors = ['#00ff88', '#52c4ff', '#f97316', '#a855f7', '#eab308', '#ef4444', '#71717a']
                 const color = colors[i] ?? '#52525b'
                 const isLeader = entry.rank === 1
                 return (
@@ -541,8 +491,7 @@ export default function Home() {
                         {entry.passRate}%
                       </span>
                       <span className="font-mono text-xs text-[#52525b]">
-                        {entry.pass}/{entry.tasks}
-                        {entry.tasks < CALIBRATION_TASK_COUNT && <span className="text-[#3f3f46]"> tested</span>}
+                        p@3 {entry.passAt3}%
                       </span>
                     </div>
                   </div>
@@ -557,120 +506,41 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Heatmap matrix */}
-          <div className="mb-2">
-            <p className="font-mono text-[11px] text-[#3f3f46] uppercase tracking-widest mb-5">
-              Task Performance Matrix
-            </p>
-          </div>
-
-          <div className="overflow-x-auto -mx-6 px-6 pb-2">
-            <div className="min-w-[640px]">
-              {/* Column headers */}
-              <div
-                className="grid gap-1.5 mb-2"
-                style={{ gridTemplateColumns: '148px repeat(14, 1fr) 64px' }}
-              >
-                <div />
-                {tasks.map((task) => (
-                  <div key={task.id} className="flex flex-col items-center gap-1.5">
-                    <span
-                      className="font-mono text-[10px] text-[#52525b] tracking-wider"
-                      title={task.id}
-                    >
-                      {task.abbr}
-                    </span>
-                    <span
-                      className="w-1 h-1 rounded-full"
-                      style={{ backgroundColor: diffConfig[task.difficulty].color, opacity: 0.6 }}
-                    />
-                  </div>
-                ))}
-                <div className="flex items-center justify-center">
-                  <span className="font-mono text-[10px] text-[#52525b] tracking-wider">SCORE</span>
-                </div>
-              </div>
-
-              {/* Data rows */}
-              {leaderboard.map((entry) => (
-                <div
-                  key={entry.rank}
-                  className="grid gap-1.5 mb-1.5"
-                  style={{ gridTemplateColumns: '148px repeat(14, 1fr) 64px' }}
-                >
-                  {/* Model name */}
-                  <div className="flex items-center pr-2">
-                    <span className="font-mono text-xs text-[#a1a1aa] truncate">
-                      {entry.model}
-                    </span>
-                  </div>
-
-                  {/* Task cells */}
-                  {tasks.map((task) => {
-                    const result =
-                      entry.taskResults[task.id as keyof typeof entry.taskResults]
-                    const cellClass =
-                      result === true
-                        ? 'bg-[#00ff88]/20 border border-[#00ff88]/10 hover:bg-[#00ff88]/30 hover:border-[#00ff88]/25'
-                        : result === false
-                        ? 'bg-[#18181b] border border-[#27272a]/40 hover:bg-[#1f1f23] hover:border-[#27272a]'
-                        : 'bg-[#111113] border border-[#27272a]/20 opacity-40'
-                    const cellTitle =
-                      result === true ? 'Pass' : result === false ? 'Fail' : 'Not tested'
-                    return (
-                      <div
-                        key={task.id}
-                        className={`h-9 rounded-[3px] transition-all duration-200 cursor-default ${cellClass}`}
-                        title={`${task.id}: ${cellTitle}`}
-                      />
-                    )
-                  })}
-
-                  {/* Score */}
-                  <div className="flex items-center justify-center">
-                    <span
-                      className="font-mono text-xs font-semibold"
-                      style={{ color: entry.passRate >= 50 ? '#00ff88' : '#52525b' }}
-                    >
-                      {entry.passRate}%
-                    </span>
-                  </div>
-                </div>
-              ))}
-
-              {/* Legend */}
-              <div className="flex flex-wrap items-center gap-5 mt-5 pt-4 border-t border-[#1e1e24]">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-3 h-3 rounded-sm bg-[#00ff88]/20 border border-[#00ff88]/10" />
-                  <span className="font-mono text-[10px] text-[#52525b]">Pass</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="w-3 h-3 rounded-sm bg-[#18181b] border border-[#27272a]/40" />
-                  <span className="font-mono text-[10px] text-[#52525b]">Fail</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="w-3 h-3 rounded-sm bg-[#111113] border border-[#27272a]/20 opacity-40" />
-                  <span className="font-mono text-[10px] text-[#52525b]">Not tested</span>
-                </div>
-                <div className="flex-1" />
-                {(['very_hard', 'hard', 'medium-hard', 'medium', 'easy'] as const).map((d) => (
-                  <div key={d} className="flex items-center gap-1.5">
-                    <span
-                      className="w-1.5 h-1.5 rounded-full"
-                      style={{ backgroundColor: diffConfig[d].color, opacity: 0.6 }}
-                    />
-                    <span className="font-mono text-[10px] text-[#3f3f46] capitalize">
-                      {diffConfig[d].label}
-                    </span>
+          {/* V11 baseline snapshot */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-2">
+            <div className="lg:col-span-2 rounded-xl p-5 border border-[#1e1e24] bg-[#111113]/40">
+              <p className="font-mono text-[11px] text-[#3f3f46] uppercase tracking-widest mb-3">
+                V11 metric definition
+              </p>
+              <p className="text-sm text-[#a1a1aa] leading-relaxed">
+                pass@1 is the primary ranking metric: total successful runs divided by total valid runs.
+                Each CLI model is run three times per task; pass@3 shows whether the model solved a task at least once across those attempts.
+              </p>
+              <p className="font-mono text-[11px] text-[#52525b] mt-4">
+                Source: V11-RESULTS.md · main HEAD d2ad3a2 · updated 2026-05-04 UTC
+              </p>
+            </div>
+            <div className="rounded-xl p-5 border border-[#1e1e24] bg-[#111113]/40">
+              <p className="font-mono text-[11px] text-[#3f3f46] uppercase tracking-widest mb-4">
+                Finance-Zero baseline
+              </p>
+              <div className="space-y-3">
+                {financeZeroLeaderboard.map((entry) => (
+                  <div key={entry.rank} className="flex items-center justify-between gap-3">
+                    <span className="font-mono text-xs text-[#a1a1aa] truncate">#{entry.rank} {entry.model}</span>
+                    <span className="font-mono text-xs text-[#52525b] shrink-0">{entry.passRate}% / {entry.passAt3}%</span>
                   </div>
                 ))}
               </div>
+              <p className="font-mono text-[10px] text-[#3f3f46] mt-4">
+                pass@1 / pass@3 across {FINANCE_ZERO_TASK_COUNT} valid tasks
+              </p>
             </div>
           </div>
 
           {/* Single-run note */}
           <p className="font-mono text-[11px] text-[#3f3f46] mt-6 pt-5 border-t border-[#1e1e24]">
-            Each model was evaluated once on the calibration set. Results are single-run — statistical significance requires ≥5 runs per task. The full merged task catalog is now approaching the 90-task target.
+            V11 uses three independent runs per task. ERR runs caused by Docker/verifier failures are excluded from both numerator and denominator. CLI comparison covers 80 tasks where all seven models have complete 3-round data.
           </p>
         </section>
 
@@ -680,27 +550,27 @@ export default function Home() {
         {/* ─── Key Findings ─── */}
         <section className="max-w-5xl mx-auto px-6 py-24">
           <h2 className="text-2xl font-semibold mb-1 tracking-tight">Key Findings</h2>
-          <p className="text-base text-[#a1a1aa] mb-10">Insights from the calibration run</p>
+          <p className="text-base text-[#a1a1aa] mb-10">Insights from the V11 three-run benchmark sweep</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
               {
                 tag: "Winner",
                 tagColor: "#00ff88",
-                title: "Opus Leads at 50%",
-                body: "claude-opus-4-6 passes 7 of 14 tasks (50%), outperforming claude-sonnet-4-6 at 36% (5/14). Opus shows consistent strength on complex multi-method tasks like kelly-var-sizing and mc-greeks-surface where Sonnet fails.",
+                title: "GPT-5.5 Leads V11",
+                body: "GPT-5.5 ranks first on pass@1 at 61.7% across the 80-task complete CLI comparison set. GPT-5.3-codex is close behind at 60.8%, with Opus 4.6 third at 59.2%.",
               },
               {
-                tag: "Common Failure",
-                tagColor: "#ef4444",
-                title: "Regime Detection is the Bottleneck",
-                body: "Both models fail regime-riskparity-cvar, regime-cta-vol-target, and sentiment-factor-alpha. Tasks requiring multi-step numerical pipelines with cascading state (eigenvalue → regime → portfolio) remain unsolved.",
+                tag: "Stability",
+                tagColor: "#52c4ff",
+                title: "pass@3 Shows Recovery Potential",
+                body: "GPT-5.4-mini posts the strongest pass@3 at 68.8%, showing that repeated attempts can recover many failures even when pass@1 trails the top models.",
               },
               {
-                tag: "Task Insight",
+                tag: "Baseline",
                 tagColor: "#f97316",
-                title: "Easy Tasks Confirm Calibration",
-                body: "Both Opus and Sonnet pass all easy/medium tasks (fama-french, momentum, bollinger). Hard tasks separate the models: Opus uniquely passes kelly-var-sizing and mc-greeks-surface; Sonnet times out on hull-white-swaption.",
+                title: "Finance-Zero Remains Far Behind",
+                body: "The best non-agentic Finance-Zero baseline reaches 24.7% pass@1 across 83 valid tasks, well below the CLI-agent leaderboard and useful as a quality-control floor.",
               },
             ].map((item) => (
               <div
@@ -865,7 +735,7 @@ harbor run --path ./tasks \
               {
                 step: '04',
                 title: 'Finance-Zero Baseline',
-                body: 'A single-call non-agentic baseline: one LLM call, one script, one run. If Finance-Zero passes a task, that task is too easy.',
+                body: 'A single-call non-agentic baseline: one LLM call, one script, one run. V11 reports it separately from CLI-agent results.',
               },
             ].map((item) => (
               <div
@@ -888,14 +758,12 @@ harbor run --path ./tasks \
         {/* ─── What's Next ─── */}
         <section id="next" className="max-w-5xl mx-auto px-6 py-24">
           <h2 className="text-2xl font-semibold mb-1 tracking-tight">What&apos;s Next</h2>
-          <p className="text-base text-[#a1a1aa] mb-10">Expanding from the 14-task calibration set to the full merged benchmark</p>
+          <p className="text-base text-[#a1a1aa] mb-10">Maintaining the V11 leaderboard while the benchmark closes the 90-task target</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { model: 'GPT-5 / Codex', agent: 'codex-cli', status: 'Planned', statusColor: '#52525b' },
-              { model: 'Claude Opus 4.6', agent: 'claude-code', status: 'Calibration Done', statusColor: '#00ff88' },
-              { model: 'Gemini 2.5 Pro', agent: 'gemini-cli', status: 'Partial Run', statusColor: '#f97316' },
-              { model: 'Finance-Zero Baseline', agent: 'gemini-2.0-flash', status: 'In Progress', statusColor: '#f97316' },
+              { model: 'Per-task public matrix', agent: 'website', status: 'Planned', statusColor: '#52525b' },
+              { model: 'Finance-Zero Baseline', agent: 'single-call scripts', status: `${FINANCE_ZERO_TASK_COUNT} Tasks Done`, statusColor: '#00ff88' },
               { model: `Full ${TARGET_TASK_COUNT} Tasks`, agent: 'all models', status: `${CURRENT_TASK_COUNT}/${TARGET_TASK_COUNT} Merged`, statusColor: '#00ff88' },
             ].map((item) => (
               <div
@@ -1082,7 +950,7 @@ harbor run --path ./tasks \
               {
                 emoji: '🤖',
                 title: 'Evaluate a Model',
-                body: 'Run any agent on all tasks and submit your results. Help us expand the leaderboard beyond the current models.',
+                body: 'Run any agent on the benchmark and submit your results. Help us expand the V11 leaderboard beyond the current CLI models.',
                 href: `${repoUrl}/blob/main/docs/model_reference.md`,
                 label: 'Model reference →',
               },
@@ -1132,7 +1000,7 @@ harbor run --path ./tasks \
                 <li><code className="text-[#71717a]">instruction.md</code> and <code className="text-[#71717a]">task.toml</code> must be <strong className="text-[#a1a1aa]">written entirely by humans</strong>. <code className="text-[#71717a]">instruction.md</code> must <strong className="text-[#a1a1aa]">not</strong> reference which skills to use — the agent must figure that out itself.</li>
                 <li>The reference solution must <strong className="text-[#a1a1aa]">not be leaked</strong> via skills or the Dockerfile; no task-specific hints that give away the answer.</li>
                 <li><strong className="text-[#a1a1aa]">Oracle must pass 100%</strong>: the reference solution must pass all tests. Run <code className="text-[#71717a]">harbor run --path ./tasks --task-name &lt;task-id&gt; --agent oracle</code> and confirm every test passes before submitting.</li>
-                <li>Finance-Zero must not pass: run the single-shot baseline; if it passes, the task is too easy.</li>
+                <li>Compare against Finance-Zero: run the single-shot baseline and report it separately from CLI-agent runs.</li>
                 <li>Deterministic: same input → same output; no external APIs at runtime.</li>
                 <li>Use real data, not synthetic — real data has missing values, outliers, mixed formats.</li>
                 <li>Tasks must represent <strong className="text-[#a1a1aa]">realistic professional workflows</strong> without artificial difficulty. The problem itself should be fundamentally hard, not an ordinary problem made adversarial so that agents score low and one can claim hardness.</li>
@@ -1150,7 +1018,7 @@ harbor run --path ./tasks \
               <ol className="list-decimal list-inside text-[#a1a1aa] space-y-1.5">
                 <li>Design the task and implement all required files (instruction, metadata, environment, tests, reference solution).</li>
                 <li>Run <code className="text-[#71717a]">harbor run --path ./tasks --task-name &lt;task-id&gt; --agent oracle</code> — oracle must pass 100%.</li>
-                <li>Run Finance-Zero baseline; it must fail (otherwise the task is too easy).</li>
+                <li>Run Finance-Zero baseline and report the result separately from agentic CLI attempts.</li>
                 <li>Run at least <strong className="text-[#a1a1aa]">two frontier agents from different companies</strong> (see the &quot;Frontier (Strongest)&quot; section in the <a href={`${repoUrl}/blob/main/docs/model_reference.md`} target="_blank" rel="noopener noreferrer" className="text-[#00ff88] hover:underline">model reference</a>) and record results; include screenshots and a summary table in your PR.</li>
                 <li>Open a PR with your task under <code className="text-[#71717a]">tasks/</code>.</li>
               </ol>
