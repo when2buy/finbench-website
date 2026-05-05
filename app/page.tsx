@@ -525,7 +525,7 @@ export default function Home() {
                   </p>
                   <h3 className="text-xl sm:text-2xl font-semibold tracking-tight">Model × task score field</h3>
                   <p className="text-sm text-[#a1a1aa] mt-2 max-w-2xl leading-relaxed">
-                    Each pixel is the average score across three runs for one model on one task. CLI rows glow green; Finance-Zero rows glow blue. Dark gaps are verifier errors or not-attempted cells.
+                    Each pixel is the average score across three runs for one model on one task. Task IDs are shown as clickable vertical labels; CLI rows glow green and Finance-Zero rows glow blue.
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-4 font-mono text-[10px] text-[#52525b]">
@@ -538,8 +538,8 @@ export default function Home() {
             </div>
 
             <div className="relative overflow-x-auto px-5 sm:px-6 py-5">
-              <div className="min-w-[1040px]">
-                <div className="grid gap-1.5 items-center mb-2" style={{ gridTemplateColumns: `158px repeat(${v11HeatmapTasks.length}, 8px) 54px` }}>
+              <div className="min-w-[1420px]">
+                <div className="grid gap-1.5 items-center mb-2" style={{ gridTemplateColumns: `158px repeat(${v11HeatmapTasks.length}, 14px) 54px` }}>
                   <div className="font-mono text-[10px] text-[#3f3f46] uppercase tracking-widest">model</div>
                   {v11HeatmapTasks.map((task, i) => (
                     <a
@@ -547,14 +547,16 @@ export default function Home() {
                       href={`${repoUrl}/tree/main/tasks/${encodeURIComponent(task)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="h-8 flex items-end justify-center group"
+                      className="h-40 flex items-end justify-center group rounded-sm hover:bg-[#18181b]/80 focus:outline-none focus:ring-1 focus:ring-[#00ff88]/60"
                       title={`${i + 1}. ${task}`}
+                      aria-label={`Open task ${task}`}
                     >
-                      {(i + 1) % 5 === 0 && (
-                        <span className="font-mono text-[8px] text-[#3f3f46] group-hover:text-[#a1a1aa] -rotate-90 origin-center translate-y-1">
-                          {i + 1}
-                        </span>
-                      )}
+                      <span
+                        className={`font-mono text-[8px] leading-none transition-colors ${i % 5 === 0 ? 'text-[#71717a]' : 'text-[#3f3f46]'} group-hover:text-[#00ff88]`}
+                        style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+                      >
+                        {i + 1}.{task}
+                      </span>
                     </a>
                   ))}
                   <div className="font-mono text-[10px] text-[#3f3f46] text-right">avg</div>
@@ -564,7 +566,7 @@ export default function Home() {
                   {v11HeatmapRows.map((row, rowIndex) => (
                     <div key={row.id}>
                       {rowIndex === 7 && <div className="h-px bg-[#1e1e24] my-2" />}
-                      <div className="grid gap-1.5 items-center" style={{ gridTemplateColumns: `158px repeat(${v11HeatmapTasks.length}, 8px) 54px` }}>
+                      <div className="grid gap-1.5 items-center" style={{ gridTemplateColumns: `158px repeat(${v11HeatmapTasks.length}, 14px) 54px` }}>
                         <div className="flex items-center gap-2 pr-2">
                           <span className="font-mono text-[10px] text-[#3f3f46] w-5">{row.kind === 'CLI' ? 'CLI' : 'FZ'}</span>
                           <span className={`font-mono text-xs truncate ${rowIndex === 0 ? 'text-white' : row.kind === 'CLI' ? 'text-[#a1a1aa]' : 'text-[#52c4ff]'}`}>
@@ -575,11 +577,15 @@ export default function Home() {
                           const style = heatColor(value, row.kind)
                           const pct = value === null ? '—' : `${Math.round(value * 100)}%`
                           return (
-                            <div
+                            <a
                               key={`${row.id}-${taskIndex}`}
-                              className="h-4 rounded-[2px] border transition-transform duration-150 hover:scale-[1.9] hover:z-10 hover:shadow-[0_0_16px_rgba(0,255,136,0.35)]"
+                              href={`${repoUrl}/tree/main/tasks/${encodeURIComponent(v11HeatmapTasks[taskIndex])}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="h-4 rounded-[2px] border transition-transform duration-150 hover:scale-[1.65] hover:z-10 hover:shadow-[0_0_16px_rgba(0,255,136,0.35)] focus:outline-none focus:ring-1 focus:ring-[#00ff88]/70"
                               style={style}
                               title={`${row.label} · ${v11HeatmapTasks[taskIndex]} · ${pct}`}
+                              aria-label={`Open task ${v11HeatmapTasks[taskIndex]} score for ${row.label}: ${pct}`}
                             />
                           )
                         })}
