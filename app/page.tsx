@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { getLatestNews } from './lib/news'
+import { v11HeatmapRows, v11HeatmapTasks } from './lib/v11Heatmap'
 
 // Task format diagram: ASCII tree, padded so "#" aligns at column 46
 const _pad = (s: string, comment: string) => s + ' '.repeat(46 - s.length) + comment
@@ -29,6 +30,19 @@ const TARGET_TASK_COUNT = 90
 const CLI_LEADERBOARD_TASK_COUNT = 80
 const FINANCE_ZERO_TASK_COUNT = 83
 const EVALUATED_MODEL_COUNT = 7
+
+const heatColor = (value: number | null, kind: 'CLI' | 'Finance-Zero') => {
+  if (value === null) return { background: '#111113', borderColor: '#27272a', opacity: 0.36 }
+  const clamped = Math.max(0, Math.min(1, value))
+  const hue = kind === 'CLI' ? 150 : 205
+  const saturation = kind === 'CLI' ? 92 : 88
+  const lightness = 12 + clamped * 46
+  return {
+    background: `linear-gradient(180deg, hsl(${hue} ${saturation}% ${lightness + 6}%), hsl(${hue} ${saturation}% ${lightness}%))`,
+    borderColor: clamped > 0.82 ? 'rgba(250,250,250,0.32)' : clamped > 0.45 ? 'rgba(255,255,255,0.13)' : 'rgba(39,39,42,0.75)',
+    opacity: 0.42 + clamped * 0.58,
+  }
+}
 
 export default function Home() {
   const latestNews = getLatestNews(3)
@@ -96,12 +110,6 @@ export default function Home() {
       passAt3: 31.2,
       date: '2026-05-04',
     },
-  ]
-
-  const financeZeroLeaderboard = [
-    { rank: 1, model: 'Finance-Zero Opus 4.6', passRate: 24.7, passAt3: 31.3 },
-    { rank: 2, model: 'Finance-Zero Sonnet 4.5', passRate: 15.0, passAt3: 18.1 },
-    { rank: 3, model: 'Finance-Zero Haiku 4.5', passRate: 11.6, passAt3: 13.3 },
   ]
 
   const [menuOpen, setMenuOpen] = useState(false)
@@ -506,35 +514,89 @@ export default function Home() {
             </div>
           </div>
 
-          {/* V11 baseline snapshot */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-2">
-            <div className="lg:col-span-2 rounded-xl p-5 border border-[#1e1e24] bg-[#111113]/40">
-              <p className="font-mono text-[11px] text-[#3f3f46] uppercase tracking-widest mb-3">
-                V11 metric definition
-              </p>
-              <p className="text-sm text-[#a1a1aa] leading-relaxed">
-                pass@1 is the primary ranking metric: total successful runs divided by total valid runs.
-                Each CLI model is run three times per task; pass@3 shows whether the model solved a task at least once across those attempts.
-              </p>
-              <p className="font-mono text-[11px] text-[#52525b] mt-4">
-                Source: V11-RESULTS.md · main HEAD d2ad3a2 · updated 2026-05-04 UTC
-              </p>
-            </div>
-            <div className="rounded-xl p-5 border border-[#1e1e24] bg-[#111113]/40">
-              <p className="font-mono text-[11px] text-[#3f3f46] uppercase tracking-widest mb-4">
-                Finance-Zero baseline
-              </p>
-              <div className="space-y-3">
-                {financeZeroLeaderboard.map((entry) => (
-                  <div key={entry.rank} className="flex items-center justify-between gap-3">
-                    <span className="font-mono text-xs text-[#a1a1aa] truncate">#{entry.rank} {entry.model}</span>
-                    <span className="font-mono text-xs text-[#52525b] shrink-0">{entry.passRate}% / {entry.passAt3}%</span>
-                  </div>
-                ))}
+          {/* V11 dense heatmap */}
+          <div className="mb-2 rounded-2xl border border-[#1e1e24] bg-[#0b0b0d] overflow-hidden relative">
+            <div className="absolute inset-0 pointer-events-none opacity-40" style={{ background: 'radial-gradient(circle at 16% 0%, rgba(0,255,136,0.14), transparent 32%), radial-gradient(circle at 88% 8%, rgba(82,196,255,0.12), transparent 30%)' }} />
+            <div className="relative p-5 sm:p-6 border-b border-[#1e1e24]">
+              <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+                <div>
+                  <p className="font-mono text-[11px] text-[#00ff88] uppercase tracking-[0.24em] mb-2">
+                    V11 score heatmap
+                  </p>
+                  <h3 className="text-xl sm:text-2xl font-semibold tracking-tight">Model × task score field</h3>
+                  <p className="text-sm text-[#a1a1aa] mt-2 max-w-2xl leading-relaxed">
+                    Each pixel is the average score across three runs for one model on one task. CLI rows glow green; Finance-Zero rows glow blue. Dark gaps are verifier errors or not-attempted cells.
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-4 font-mono text-[10px] text-[#52525b]">
+                  <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-[#111113] border border-[#27272a]" />0.00</div>
+                  <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm" style={{ background: 'hsl(150 92% 34%)' }} />0.50</div>
+                  <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm" style={{ background: 'hsl(150 92% 64%)' }} />1.00 CLI</div>
+                  <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm" style={{ background: 'hsl(205 88% 60%)' }} />Finance-Zero</div>
+                </div>
               </div>
-              <p className="font-mono text-[10px] text-[#3f3f46] mt-4">
-                pass@1 / pass@3 across {FINANCE_ZERO_TASK_COUNT} valid tasks
-              </p>
+            </div>
+
+            <div className="relative overflow-x-auto px-5 sm:px-6 py-5">
+              <div className="min-w-[1040px]">
+                <div className="grid gap-1.5 items-center mb-2" style={{ gridTemplateColumns: `158px repeat(${v11HeatmapTasks.length}, 8px) 54px` }}>
+                  <div className="font-mono text-[10px] text-[#3f3f46] uppercase tracking-widest">model</div>
+                  {v11HeatmapTasks.map((task, i) => (
+                    <a
+                      key={task}
+                      href={`${repoUrl}/tree/main/tasks/${encodeURIComponent(task)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="h-8 flex items-end justify-center group"
+                      title={`${i + 1}. ${task}`}
+                    >
+                      {(i + 1) % 5 === 0 && (
+                        <span className="font-mono text-[8px] text-[#3f3f46] group-hover:text-[#a1a1aa] -rotate-90 origin-center translate-y-1">
+                          {i + 1}
+                        </span>
+                      )}
+                    </a>
+                  ))}
+                  <div className="font-mono text-[10px] text-[#3f3f46] text-right">avg</div>
+                </div>
+
+                <div className="space-y-1.5">
+                  {v11HeatmapRows.map((row, rowIndex) => (
+                    <div key={row.id}>
+                      {rowIndex === 7 && <div className="h-px bg-[#1e1e24] my-2" />}
+                      <div className="grid gap-1.5 items-center" style={{ gridTemplateColumns: `158px repeat(${v11HeatmapTasks.length}, 8px) 54px` }}>
+                        <div className="flex items-center gap-2 pr-2">
+                          <span className="font-mono text-[10px] text-[#3f3f46] w-5">{row.kind === 'CLI' ? 'CLI' : 'FZ'}</span>
+                          <span className={`font-mono text-xs truncate ${rowIndex === 0 ? 'text-white' : row.kind === 'CLI' ? 'text-[#a1a1aa]' : 'text-[#52c4ff]'}`}>
+                            {row.label}
+                          </span>
+                        </div>
+                        {row.values.map((value, taskIndex) => {
+                          const style = heatColor(value, row.kind)
+                          const pct = value === null ? '—' : `${Math.round(value * 100)}%`
+                          return (
+                            <div
+                              key={`${row.id}-${taskIndex}`}
+                              className="h-4 rounded-[2px] border transition-transform duration-150 hover:scale-[1.9] hover:z-10 hover:shadow-[0_0_16px_rgba(0,255,136,0.35)]"
+                              style={style}
+                              title={`${row.label} · ${v11HeatmapTasks[taskIndex]} · ${pct}`}
+                            />
+                          )
+                        })}
+                        <div className="font-mono text-xs text-right" style={{ color: row.kind === 'CLI' ? '#00ff88' : '#52c4ff' }}>
+                          {row.avg === null ? '—' : `${Math.round(row.avg * 100)}%`}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-5 pt-4 border-t border-[#1e1e24] grid grid-cols-1 sm:grid-cols-3 gap-3 text-[11px] font-mono text-[#52525b]">
+                  <div><span className="text-[#00ff88]">7 CLI agents</span> × {v11HeatmapTasks.length} tasks × 3 runs</div>
+                  <div><span className="text-[#52c4ff]">3 Finance-Zero baselines</span> tracked separately</div>
+                  <div className="sm:text-right">Source: V11-RESULTS.md · d2ad3a2 · 2026-05-04 UTC</div>
+                </div>
+              </div>
             </div>
           </div>
 
