@@ -31,6 +31,21 @@ const CLI_LEADERBOARD_TASK_COUNT = 80
 const FINANCE_ZERO_TASK_COUNT = 83
 const EVALUATED_MODEL_COUNT = 7
 
+const contributorAffiliations = [
+  { name: 'Stanford', domain: 'stanford.edu' },
+  { name: 'UC Berkeley', domain: 'berkeley.edu' },
+  { name: 'CMU', domain: 'cmu.edu' },
+  { name: 'Princeton', domain: 'princeton.edu' },
+  { name: 'University of Chicago Booth', domain: 'chicagobooth.edu' },
+  { name: 'Stony Brook University', domain: 'stonybrook.edu' },
+  { name: 'OpenAI', domain: 'openai.com' },
+  { name: 'Anthropic', domain: 'anthropic.com' },
+  { name: 'Google DeepMind', domain: 'deepmind.google' },
+  { name: 'xAI', domain: 'x.ai' },
+  { name: 'Meta', domain: 'meta.com' },
+  { name: 'Google', domain: 'google.com' },
+]
+
 const heatColor = (value: number | null, kind: 'CLI' | 'Finance-Zero') => {
   if (value === null) return { background: '#111113', borderColor: '#27272a', opacity: 0.36 }
   const clamped = Math.max(0, Math.min(1, value))
@@ -1141,6 +1156,37 @@ harbor run --path ./tasks \
 
         {/* ─── Footer ─── */}
         <footer className="max-w-5xl mx-auto px-6 py-12">
+          <div className="mb-12 rounded-2xl border border-[#1e1e24] bg-[#111113]/35 px-5 py-6 sm:px-7 sm:py-7">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#71717a] mb-2">
+              Contributor affiliations
+            </p>
+            <h2 className="text-xl sm:text-2xl font-semibold tracking-tight mb-6">
+              Contributors come from these institutions and labs.
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+              {contributorAffiliations.map((org) => (
+                <a
+                  key={org.name}
+                  href={`https://${org.domain}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group min-h-24 rounded-xl border border-[#27272a] bg-[#0a0a0c]/70 px-3 py-4 flex flex-col items-center justify-center gap-3 hover:border-[#00ff88]/35 hover:bg-[#00ff88]/[0.025] transition-colors duration-200"
+                >
+                  <span className="h-10 w-10 rounded-lg bg-white flex items-center justify-center overflow-hidden border border-white/10">
+                    <img
+                      src={`https://logo.clearbit.com/${org.domain}`}
+                      alt={`${org.name} logo`}
+                      className="max-h-7 max-w-7 object-contain"
+                      loading="lazy"
+                    />
+                  </span>
+                  <span className="text-center text-xs font-medium text-[#a1a1aa] group-hover:text-white transition-colors leading-snug">
+                    {org.name}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <p className="text-sm text-[#3f3f46]">
               Live task catalog from GitHub: {repoTasksLoading ? CURRENT_TASK_COUNT : repoTasks.length} of {TARGET_TASK_COUNT} target tasks merged. Built on{' '}
