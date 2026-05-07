@@ -53,9 +53,9 @@ const contributorAffiliations = [
     logoSrc: 'https://upload.wikimedia.org/wikipedia/commons/4/42/Princeton_text_logo.svg',
   },
   {
-    name: 'University of Chicago Booth',
-    domain: 'chicagobooth.edu',
-    logoSrc: 'https://www.chicagobooth.edu/-/media/project/chicago-booth/why-booth/main/chicago-booth-why-booth-chicago-booth-logo.jpg',
+    name: 'University of Chicago',
+    domain: 'uchicago.edu',
+    logoSrc: 'https://upload.wikimedia.org/wikipedia/commons/c/cd/University_of_Chicago_Coat_of_arms.svg',
   },
   {
     name: 'Stony Brook University',
