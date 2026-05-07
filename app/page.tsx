@@ -1261,7 +1261,7 @@ harbor run --path ./tasks \
               Contributor affiliations
             </p>
             <h2 className="text-xl sm:text-2xl font-semibold tracking-tight mb-6">
-              Contributors come from these institutions and labs.
+              Contributors come from these institutions, labs, and firms.
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
               {contributorAffiliations.map((org) => (
