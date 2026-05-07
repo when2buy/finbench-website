@@ -27,9 +27,9 @@ const TASK_FORMAT_DIAGRAM = [
 
 const CURRENT_TASK_COUNT = 87
 const TARGET_TASK_COUNT = 90
-const CLI_LEADERBOARD_TASK_COUNT = 80
-const FINANCE_ZERO_TASK_COUNT = 83
-const EVALUATED_MODEL_COUNT = 7
+const CLI_LEADERBOARD_TASK_COUNT = 87
+const FINANCE_ZERO_TASK_COUNT = 87
+const EVALUATED_MODEL_COUNT = 42
 
 const contributorAffiliations = [
   {
@@ -92,6 +92,21 @@ const contributorAffiliations = [
     domain: 'google.com',
     logoSrc: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
   },
+  {
+    name: 'Millennium Management',
+    domain: 'mlp.com',
+    logoSrc: 'https://upload.wikimedia.org/wikipedia/commons/5/55/Millennium_Management_logo.svg',
+  },
+  {
+    name: 'Point72',
+    domain: 'point72.com',
+    logoSrc: 'https://upload.wikimedia.org/wikipedia/commons/d/d4/Point72_Asset_Management_Logo.svg',
+  },
+  {
+    name: 'Paraclete Capital',
+    domain: 'paraclete.capital',
+    logoSrc: '/paraclete_logo.svg',
+  },
 ]
 
 const heatColor = (value: number | null, kind: 'CLI' | 'Finance-Zero') => {
@@ -117,61 +132,79 @@ export default function Home() {
       tasks: CLI_LEADERBOARD_TASK_COUNT,
       passRate: 61.7,
       passAt3: 66.2,
-      date: '2026-05-04',
+      date: '2026-05-07',
     },
     {
       rank: 2,
+      model: 'claude-opus-4-7',
+      agent: 'claude-code',
+      tasks: CLI_LEADERBOARD_TASK_COUNT,
+      passRate: 61.2,
+      passAt3: 67.1,
+      date: '2026-05-07',
+    },
+    {
+      rank: 3,
       model: 'GPT-5.3-codex',
       agent: 'codex-cli',
       tasks: CLI_LEADERBOARD_TASK_COUNT,
       passRate: 60.8,
       passAt3: 67.5,
-      date: '2026-05-04',
+      date: '2026-05-07',
     },
     {
-      rank: 3,
+      rank: 4,
       model: 'claude-opus-4-6',
       agent: 'claude-code',
       tasks: CLI_LEADERBOARD_TASK_COUNT,
       passRate: 59.2,
       passAt3: 65.0,
-      date: '2026-05-04',
+      date: '2026-05-07',
     },
     {
-      rank: 4,
+      rank: 5,
       model: 'GPT-5.4',
       agent: 'codex-cli',
       tasks: CLI_LEADERBOARD_TASK_COUNT,
       passRate: 57.5,
-      passAt3: 63.7,
-      date: '2026-05-04',
+      passAt3: 63.8,
+      date: '2026-05-07',
     },
     {
-      rank: 5,
+      rank: 6,
       model: 'GPT-5.4-mini',
       agent: 'codex-cli',
       tasks: CLI_LEADERBOARD_TASK_COUNT,
       passRate: 57.1,
       passAt3: 68.8,
-      date: '2026-05-04',
+      date: '2026-05-07',
     },
     {
-      rank: 6,
+      rank: 7,
+      model: 'claude-sonnet-4-6',
+      agent: 'claude-code',
+      tasks: CLI_LEADERBOARD_TASK_COUNT,
+      passRate: 56.3,
+      passAt3: 67.1,
+      date: '2026-05-07',
+    },
+    {
+      rank: 8,
       model: 'claude-sonnet-4-5',
       agent: 'claude-code',
       tasks: CLI_LEADERBOARD_TASK_COUNT,
       passRate: 46.2,
       passAt3: 60.0,
-      date: '2026-05-04',
+      date: '2026-05-07',
     },
     {
-      rank: 7,
+      rank: 9,
       model: 'claude-haiku-4-5',
       agent: 'claude-code',
       tasks: CLI_LEADERBOARD_TASK_COUNT,
       passRate: 20.8,
       passAt3: 31.2,
-      date: '2026-05-04',
+      date: '2026-05-07',
     },
   ]
 
