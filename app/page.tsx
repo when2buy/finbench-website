@@ -32,18 +32,66 @@ const FINANCE_ZERO_TASK_COUNT = 83
 const EVALUATED_MODEL_COUNT = 7
 
 const contributorAffiliations = [
-  { name: 'Stanford', domain: 'stanford.edu' },
-  { name: 'UC Berkeley', domain: 'berkeley.edu' },
-  { name: 'CMU', domain: 'cmu.edu' },
-  { name: 'Princeton', domain: 'princeton.edu' },
-  { name: 'University of Chicago Booth', domain: 'chicagobooth.edu' },
-  { name: 'Stony Brook University', domain: 'stonybrook.edu' },
-  { name: 'OpenAI', domain: 'openai.com' },
-  { name: 'Anthropic', domain: 'anthropic.com' },
-  { name: 'Google DeepMind', domain: 'deepmind.google' },
-  { name: 'xAI', domain: 'x.ai' },
-  { name: 'Meta', domain: 'meta.com' },
-  { name: 'Google', domain: 'google.com' },
+  {
+    name: 'Stanford',
+    domain: 'stanford.edu',
+    logoSrc: 'https://upload.wikimedia.org/wikipedia/commons/3/3f/Stanford_plain_block_%22S%22_logo.svg',
+  },
+  {
+    name: 'UC Berkeley',
+    domain: 'berkeley.edu',
+    logoSrc: 'https://upload.wikimedia.org/wikipedia/commons/8/82/University_of_California%2C_Berkeley_logo.svg',
+  },
+  {
+    name: 'CMU',
+    domain: 'cmu.edu',
+    logoSrc: 'https://upload.wikimedia.org/wikipedia/commons/f/f3/Carnegie_Mellon_University_wordmark.svg',
+  },
+  {
+    name: 'Princeton',
+    domain: 'princeton.edu',
+    logoSrc: 'https://upload.wikimedia.org/wikipedia/commons/4/42/Princeton_text_logo.svg',
+  },
+  {
+    name: 'University of Chicago Booth',
+    domain: 'chicagobooth.edu',
+    logoSrc: 'https://www.chicagobooth.edu/-/media/project/chicago-booth/why-booth/main/chicago-booth-why-booth-chicago-booth-logo.jpg',
+  },
+  {
+    name: 'Stony Brook University',
+    domain: 'stonybrook.edu',
+    logoSrc: 'https://www.stonybrook.edu/_resources/images/sb-logo-desktop-12.7.25.svg',
+  },
+  {
+    name: 'OpenAI',
+    domain: 'openai.com',
+    logoSrc: 'https://upload.wikimedia.org/wikipedia/commons/4/4d/OpenAI_Logo.svg',
+  },
+  {
+    name: 'Anthropic',
+    domain: 'anthropic.com',
+    logoSrc: 'https://cdn.simpleicons.org/anthropic/191919',
+  },
+  {
+    name: 'Google DeepMind',
+    domain: 'deepmind.google',
+    logoSrc: 'https://upload.wikimedia.org/wikipedia/commons/d/dc/Google_DeepMind_logo.svg',
+  },
+  {
+    name: 'xAI',
+    domain: 'x.ai',
+    logoSrc: 'https://upload.wikimedia.org/wikipedia/commons/5/57/XAI-Logo.svg',
+  },
+  {
+    name: 'Meta',
+    domain: 'meta.com',
+    logoSrc: 'https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg',
+  },
+  {
+    name: 'Google',
+    domain: 'google.com',
+    logoSrc: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
+  },
 ]
 
 const heatColor = (value: number | null, kind: 'CLI' | 'Finance-Zero') => {
@@ -1172,11 +1220,11 @@ harbor run --path ./tasks \
                   rel="noopener noreferrer"
                   className="group min-h-24 rounded-xl border border-[#27272a] bg-[#0a0a0c]/70 px-3 py-4 flex flex-col items-center justify-center gap-3 hover:border-[#00ff88]/35 hover:bg-[#00ff88]/[0.025] transition-colors duration-200"
                 >
-                  <span className="h-10 w-10 rounded-lg bg-white flex items-center justify-center overflow-hidden border border-white/10">
+                  <span className="h-12 w-full rounded-lg bg-white flex items-center justify-center overflow-hidden border border-white/10 px-2">
                     <img
-                      src={`https://logo.clearbit.com/${org.domain}`}
+                      src={org.logoSrc}
                       alt={`${org.name} logo`}
-                      className="max-h-7 max-w-7 object-contain"
+                      className="max-h-9 max-w-full object-contain"
                       loading="lazy"
                     />
                   </span>
