@@ -95,12 +95,12 @@ const contributorAffiliations = [
   {
     name: 'Millennium Management',
     domain: 'mlp.com',
-    logoSrc: 'https://upload.wikimedia.org/wikipedia/commons/5/55/Millennium_Management_logo.svg',
+    logoSrc: '/contributor-logos/millennium.jpg',
   },
   {
     name: 'Point72',
     domain: 'point72.com',
-    logoSrc: 'https://upload.wikimedia.org/wikipedia/commons/d/d4/Point72_Asset_Management_Logo.svg',
+    logoSrc: '/contributor-logos/point72.jpg',
   },
   {
     name: 'Paraclete Capital',
