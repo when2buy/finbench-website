@@ -268,6 +268,8 @@ export default function Home() {
   }, [])
 
   const websiteRepoUrl = 'https://github.com/when2buy/finbench-website'
+  const totalContributors = 145
+  const activeContributorCount = 26
   type Contributor = { login: string; avatarUrl: string; bench: boolean; website: boolean }
   const [contributors, setContributors] = useState<Contributor[]>([])
   const [contributorsLoading, setContributorsLoading] = useState(true)
@@ -1043,59 +1045,30 @@ harbor run --path ./tasks \
           )}
           {!contributorsLoading && !contributorsError && (
             <p className="font-mono text-sm text-[#a1a1aa] mb-8">
-              {contributors.length} Active Contributors
+              {totalContributors} contributors total · {activeContributorCount} active GitHub contributors
             </p>
           )}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2.5">
             {contributors.map((c) => (
-              <div
+              <a
                 key={c.login}
-                className="rounded-xl px-5 py-5 border border-[#1e1e24] bg-[#111113]/40 hover:border-[#3f3f46] transition-colors duration-200 flex flex-col items-center text-center"
+                href={`https://github.com/${c.login}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={`${c.login}${c.bench ? ' · QFBench' : ''}${c.website ? ' · Website' : ''}`}
+                className="group rounded-lg px-2 py-2.5 border border-[#1e1e24] bg-[#111113]/40 hover:border-[#3f3f46] transition-colors duration-200 flex flex-col items-center text-center"
               >
-                <a
-                  href={`https://github.com/${c.login}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-16 h-16 rounded-full overflow-hidden mb-3 border border-[#27272a] hover:border-[#52525b] transition-colors"
-                >
+                <span className="block w-9 h-9 rounded-full overflow-hidden mb-1.5 border border-[#27272a] group-hover:border-[#52525b] transition-colors">
                   <img
                     src={c.avatarUrl}
                     alt={c.login}
                     className="w-full h-full object-cover"
                   />
-                </a>
-                <p className="font-mono text-sm font-medium text-[#a1a1aa] mb-3">{c.login}</p>
-                <div className="flex flex-wrap justify-center gap-3 font-mono text-[11px]">
-                  <a
-                    href={`https://github.com/${c.login}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#00ff88] hover:underline"
-                  >
-                    Profile
-                  </a>
-                  {c.bench && (
-                    <a
-                      href={`${repoUrl}/pulls?q=is%3Apr+author%3A${encodeURIComponent(c.login)}+is%3Amerged`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#00ff88] hover:underline"
-                    >
-                      Bench PRs
-                    </a>
-                  )}
-                  {c.website && (
-                    <a
-                      href={`${websiteRepoUrl}/pulls?q=is%3Apr+author%3A${encodeURIComponent(c.login)}+is%3Amerged`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#00ff88] hover:underline"
-                    >
-                      Website PRs
-                    </a>
-                  )}
-                </div>
-              </div>
+                </span>
+                <span className="w-full truncate font-mono text-[10px] leading-tight font-medium text-[#a1a1aa] group-hover:text-white transition-colors">
+                  {c.login}
+                </span>
+              </a>
             ))}
           </div>
           <div className="mt-10 text-center">
