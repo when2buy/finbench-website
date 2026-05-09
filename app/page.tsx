@@ -55,7 +55,7 @@ const contributorAffiliations = [
   {
     name: 'University of Chicago',
     domain: 'uchicago.edu',
-    logoSrc: 'https://upload.wikimedia.org/wikipedia/commons/c/cd/University_of_Chicago_Coat_of_arms.svg',
+    logoSrc: '/contributor-logos/uchicago-logo.svg',
   },
   {
     name: 'Stony Brook University',
