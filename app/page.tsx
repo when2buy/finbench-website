@@ -105,7 +105,7 @@ const contributorAffiliations = [
   {
     name: 'Paraclete Capital',
     domain: 'paraclete.capital',
-    logoSrc: '/paraclete_logo.svg',
+    logoSrc: '/contributor-logos/paraclete.jpg',
   },
 ]
 
