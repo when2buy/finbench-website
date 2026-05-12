@@ -100,7 +100,7 @@ const contributorAffiliations = [
   {
     name: 'Point72',
     domain: 'point72.com',
-    logoSrc: '/contributor-logos/point72.jpg',
+    logoSrc: '/contributor-logos/point72.png',
   },
   {
     name: 'Paraclete Capital',
